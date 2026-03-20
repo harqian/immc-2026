@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"name": "wildfire_history",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "event_id": "EONET_15602", "title": "Wildfire in Namibia 1025125", "observation_date": "2025-09-25T19:00:00Z", "magnitude_ha": 6503.0, "magnitude_unit": "hectare", "source": "nasa_eonet_wildfires" }, "geometry": { "type": "Point", "coordinates": [ 15.967660093111691, -18.655360218976934 ] } },
+{ "type": "Feature", "properties": { "event_id": "EONET_15603", "title": "Wildfire in Namibia 1025126", "observation_date": "2025-09-25T19:00:00Z", "magnitude_ha": 6552.0, "magnitude_unit": "hectare", "source": "nasa_eonet_wildfires" }, "geometry": { "type": "Point", "coordinates": [ 15.809892568480102, -18.808073495354463 ] } },
+{ "type": "Feature", "properties": { "event_id": "EONET_15608", "title": "Wildfire in Namibia 1025127", "observation_date": "2025-09-25T19:00:00Z", "magnitude_ha": 7920.0, "magnitude_unit": "hectare", "source": "nasa_eonet_wildfires" }, "geometry": { "type": "Point", "coordinates": [ 15.874901588506054, -18.656220606572518 ] } },
+{ "type": "Feature", "properties": { "event_id": "EONET_15610", "title": "Wildfire in Namibia 1025129", "observation_date": "2025-09-25T19:00:00Z", "magnitude_ha": 13969.0, "magnitude_unit": "hectare", "source": "nasa_eonet_wildfires" }, "geometry": { "type": "Point", "coordinates": [ 16.311901811002546, -19.1415135821461 ] } }
+]
+}

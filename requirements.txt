@@ -1,0 +1,14 @@
+geopandas
+shapely
+rasterio
+numpy
+pandas
+pyproj
+pyogrio
+pyarrow
+pillow
+requests
+scipy
+folium
+matplotlib
+contextily

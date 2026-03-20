@@ -1,0 +1,14 @@
+target_label,pixel_x,pixel_y,longitude,latitude,notes
+boundary_west_tip,95,289,14.353169,-19.061983,westmost boundary tip
+galton_gate_kink,132,255,14.488913,-19.320987,west gate kink on southern edge
+boundary_northwest_shoulder,162,164,14.568257,-18.646278,upper west shoulder on boundary
+boundary_north_notch,503,165,15.6638,-18.499733,northern boundary notch west end
+boundary_northeast_edge,956,122,17.037872,-18.500832,northeast top boundary
+boundary_east_edge,954,345,17.115925,-19.205284,eastern outer boundary
+boundary_south_apex,852,416,16.70156,-19.486957,southernmost southeast apex
+boundary_southwest_run,470,298,15.317273,-19.191558,south boundary run west of the pan
+boundary_pan_southwest,727,363,15.850533,-19.283916,south boundary near the pan's southwest approach
+pan_west,644,211,15.840451,-18.893647,western extreme of the pan outline
+pan_north,847,122,16.806064,-18.500841,northern extreme of the pan outline
+pan_east,908,123,16.91843,-18.799968,eastern extreme of the pan outline
+pan_south,760,374,16.004827,-19.142269,southern extreme of the pan outline

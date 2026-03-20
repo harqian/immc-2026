@@ -1,0 +1,5 @@
+name,kind,source,source_detail,latitude,longitude,notes
+Andersson Gate,gate,osm_boundary_road_intersection,"Etosha boundary relation 2982497 with OSM road C38",-19.331285,15.940097,derived from the C38 road intersection with the park boundary
+Galton Gate,gate,osm_boundary_road_intersection,"Etosha boundary relation 2982497 with OSM tertiary approach road",-19.314674,14.486732,derived from the western approach road intersection with the park boundary
+King Nehale Gate,gate,osm_boundary_road_intersection,"Etosha boundary relation 2982497 with OSM road D3646",-18.500941,16.744232,derived from the D3646 road intersection with the park boundary
+Von Lindequist Gate,gate,osm_boundary_road_intersection,"Etosha boundary relation 2982497 with OSM road C38 / Namutoni Gate on official map",-18.803413,17.043264,derived from the eastern C38 road intersection with the park boundary; official map OCR identifies this as the Namutoni/Von Lindequist gate

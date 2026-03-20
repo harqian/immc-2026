@@ -1,0 +1,42 @@
+{
+  "type": "FeatureCollection",
+  "name": "etosha_pan_curated",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Etosha Pan",
+        "source": "manual_map_estimate",
+        "source_detail": "https://etoshanationalpark.co.za/wp-content/uploads/sites/16/2025/03/Etosha-National-Park-Map.jpg",
+        "notes": "rough pan outline manually curated from the 2025 public map for the mvp"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [15.681, -18.857],
+            [15.831, -18.685],
+            [16.103, -18.585],
+            [16.412, -18.569],
+            [16.678, -18.620],
+            [16.865, -18.735],
+            [16.887, -18.869],
+            [16.816, -18.976],
+            [16.629, -19.052],
+            [16.364, -19.085],
+            [16.065, -19.070],
+            [15.823, -18.995],
+            [15.701, -18.904],
+            [15.681, -18.857]
+          ]
+        ]
+      }
+    }
+  ]
+}

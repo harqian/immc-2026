@@ -1,0 +1,7 @@
+name,kind,source,source_detail,latitude,longitude,notes
+Dolomite Camp,camp,nominatim_osm,https://nominatim.openstreetmap.org/search?q=Dolomite+Camp%2C+Namibia,-19.0102149,14.4739766,selected the named hotel feature returned by nominatim
+Olifantsrus Camp,camp,geofabrik_osm_pois,namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp,-18.9711722,14.8609827,selected the named Olifantsrus Rest Camp feature from the geofabrik poi extract
+Okaukuejo Camp,camp,geofabrik_osm_pois,namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp,-19.1675044,15.9163048,selected the named Okaukuejo Resort feature from the geofabrik poi extract
+Halali Camp,camp,geofabrik_osm_pois,namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp,-19.0355915,16.4721626,selected the named Halali Camp feature from the geofabrik poi extract
+Namutoni Camp,camp,geofabrik_osm_pois,namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp,-18.8058531,16.9405408,selected the named Namutoni Camp feature from the geofabrik poi extract
+Onkoshi Camp,camp,nominatim_osm,https://nominatim.openstreetmap.org/search?q=Onkoshi+Camp%2C+Namibia,-18.6587607,16.7248532,selected the named hotel feature returned by nominatim

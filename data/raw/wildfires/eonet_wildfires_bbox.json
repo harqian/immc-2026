@@ -1,0 +1,177 @@
+{
+	"title": "EONET Events",
+	"description": "Natural events from EONET.",
+	"link": "https://eonet.gsfc.nasa.gov/api/v3/events",
+	"events": [
+		{
+			"id": "EONET_15601",
+			"title": "Wildfire in Namibia 1025124",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_15601",
+			"closed": "2025-09-26T00:00:00Z",
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "GDACS",
+					"url": "https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1025124"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 5296.00,
+					"magnitudeUnit": "hectare",
+					"date": "2025-09-25T19:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 15.243017926775446, -18.503210554438709 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_15602",
+			"title": "Wildfire in Namibia 1025125",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_15602",
+			"closed": "2025-09-26T00:00:00Z",
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "GDACS",
+					"url": "https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1025125"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 6503.00,
+					"magnitudeUnit": "hectare",
+					"date": "2025-09-25T19:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 15.967660093111691, -18.655360218976934 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_15603",
+			"title": "Wildfire in Namibia 1025126",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_15603",
+			"closed": "2025-09-26T00:00:00Z",
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "GDACS",
+					"url": "https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1025126"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 6552.00,
+					"magnitudeUnit": "hectare",
+					"date": "2025-09-25T19:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 15.809892568480102, -18.808073495354463 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_15608",
+			"title": "Wildfire in Namibia 1025127",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_15608",
+			"closed": "2025-09-28T00:00:00Z",
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "GDACS",
+					"url": "https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1025127"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 7920.00,
+					"magnitudeUnit": "hectare",
+					"date": "2025-09-25T19:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 15.874901588506054, -18.656220606572518 ]
+							}
+
+						
+			]
+		},
+
+			{
+			"id": "EONET_15610",
+			"title": "Wildfire in Namibia 1025129",
+            "description": null,
+			"link": "https://eonet.gsfc.nasa.gov/api/v3/events/EONET_15610",
+			"closed": "2025-09-28T00:00:00Z",
+				"categories": [
+					{
+					"id": "wildfires",
+					"title": "Wildfires"
+				}
+
+	    				],
+    			"sources": [
+					{
+					"id": "GDACS",
+					"url": "https://www.gdacs.org/report.aspx?eventtype=WF&eventid=1025129"
+				}
+
+						
+			],
+					"geometry": [
+					{
+							"magnitudeValue": 13969.00,
+					"magnitudeUnit": "hectare",
+					"date": "2025-09-25T19:00:00Z",
+					"type": "Point", 
+							"coordinates": [ 16.311901811002546, -19.1415135821461 ]
+							}
+
+						
+			]
+		}
+
+		]
+}

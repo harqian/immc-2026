@@ -1,0 +1,13 @@
+{
+"type": "FeatureCollection",
+"name": "camps",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Dolomite Camp", "kind": "camp", "source": "nominatim_osm", "source_detail": "https://nominatim.openstreetmap.org/search?q=Dolomite+Camp%2C+Namibia" }, "geometry": { "type": "Point", "coordinates": [ 14.4739766, -19.0102149 ] } },
+{ "type": "Feature", "properties": { "name": "Olifantsrus Camp", "kind": "camp", "source": "geofabrik_osm_pois", "source_detail": "namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp" }, "geometry": { "type": "Point", "coordinates": [ 14.8609827, -18.9711722 ] } },
+{ "type": "Feature", "properties": { "name": "Okaukuejo Camp", "kind": "camp", "source": "geofabrik_osm_pois", "source_detail": "namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp" }, "geometry": { "type": "Point", "coordinates": [ 15.9163048, -19.1675044 ] } },
+{ "type": "Feature", "properties": { "name": "Halali Camp", "kind": "camp", "source": "geofabrik_osm_pois", "source_detail": "namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp" }, "geometry": { "type": "Point", "coordinates": [ 16.4721626, -19.0355915 ] } },
+{ "type": "Feature", "properties": { "name": "Namutoni Camp", "kind": "camp", "source": "geofabrik_osm_pois", "source_detail": "namibia-latest-free.shp.zip:gis_osm_pois_free_1.shp" }, "geometry": { "type": "Point", "coordinates": [ 16.9405408, -18.8058531 ] } },
+{ "type": "Feature", "properties": { "name": "Onkoshi Camp", "kind": "camp", "source": "nominatim_osm", "source_detail": "https://nominatim.openstreetmap.org/search?q=Onkoshi+Camp%2C+Namibia" }, "geometry": { "type": "Point", "coordinates": [ 16.7248532, -18.6587607 ] } }
+]
+}
