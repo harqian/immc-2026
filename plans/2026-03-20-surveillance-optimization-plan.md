@@ -797,9 +797,9 @@ Export optimization outputs in forms that are easy to audit spatially and numeri
 ### Success Criteria
 
 #### Automated Verification
-- [ ] all expected output files are written and non-empty
-- [ ] visualization scripts run without error
-- [ ] frontier chart and map files exist for the example scenario
+- [x] all expected output files are written and non-empty
+- [x] visualization scripts run without error
+- [x] frontier chart and map files exist for the example scenario
 
 #### Manual Verification
 - [ ] selected sites appear operationally plausible
