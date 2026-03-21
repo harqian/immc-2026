@@ -184,6 +184,14 @@ def validate_asset_types(config: dict[str, Any]) -> list[dict[str, Any]]:
             raise ValueError(f"{asset_type}.site_eligibility must contain non-empty strings")
         if not isinstance(mapping["terrain_modifier_profile"], str) or not mapping["terrain_modifier_profile"]:
             raise ValueError(f"{asset_type}.terrain_modifier_profile must be a non-empty string")
+        terrain_parameters = require_mapping(
+            mapping.get("terrain_modifier_parameters"),
+            f"{asset_type}.terrain_modifier_parameters",
+        )
+        if not terrain_parameters:
+            raise ValueError(f"{asset_type}.terrain_modifier_parameters must not be empty")
+        for parameter_name, parameter_value in terrain_parameters.items():
+            require_numeric(parameter_value, f"{asset_type}.terrain_modifier_parameters.{parameter_name}")
         require_numeric(mapping["max_units_per_site"], f"{asset_type}.max_units_per_site")
         require_bool(mapping["counts_toward_budget"], f"{asset_type}.counts_toward_budget")
         bundle_size = require_numeric(mapping["camera_bundle_size"], f"{asset_type}.camera_bundle_size")

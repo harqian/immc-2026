@@ -10,6 +10,10 @@ asset_types:
       - high_risk_cell
       - manual_override
     terrain_modifier_profile: foot
+    terrain_modifier_parameters:
+      base_factor: 1.0
+      roughness_penalty: 0.35
+      operability_penalty: 0.45
     max_units_per_site: 8
     counts_toward_budget: true
     camera_bundle_size: 0
@@ -25,6 +29,10 @@ asset_types:
       - high_risk_cell
       - manual_override
     terrain_modifier_profile: car
+    terrain_modifier_parameters:
+      base_factor: 1.0
+      roughness_penalty: 0.5
+      operability_penalty: 0.2
     max_units_per_site: 4
     counts_toward_budget: true
     camera_bundle_size: 0
@@ -40,6 +48,10 @@ asset_types:
       - high_risk_cell
       - manual_override
     terrain_modifier_profile: drone
+    terrain_modifier_parameters:
+      base_factor: 1.1
+      roughness_penalty: 0.08
+      operability_penalty: 0.0
     max_units_per_site: 3
     counts_toward_budget: true
     camera_bundle_size: 0
@@ -52,6 +64,10 @@ asset_types:
       - waterhole
       - manual_override
     terrain_modifier_profile: camera_visibility
+    terrain_modifier_parameters:
+      base_factor: 1.0
+      openness_bonus: 0.35
+      waterhole_bonus: 0.25
     max_units_per_site: 10
     counts_toward_budget: true
     camera_bundle_size: 5

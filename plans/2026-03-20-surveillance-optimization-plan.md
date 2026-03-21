@@ -487,11 +487,11 @@ Build a terrain and mobility layer so different asset types can have different e
 ### Success Criteria
 
 #### Automated Verification
-- [ ] every grid cell has exactly one terrain-cost record
-- [ ] all speed and visibility modifiers are numeric and finite
-- [ ] no modifier is silently missing
-- [ ] `protection_benefit` is present and finite for every grid cell
-- [ ] `human_operability_penalty` is present and finite for every grid cell
+- [x] every grid cell has exactly one terrain-cost record
+- [x] all speed and visibility modifiers are numeric and finite
+- [x] no modifier is silently missing
+- [x] `protection_benefit` is present and finite for every grid cell
+- [x] `human_operability_penalty` is present and finite for every grid cell
 
 #### Manual Verification
 - [ ] steep or rough terrain plausibly penalizes people/cars more than drones
