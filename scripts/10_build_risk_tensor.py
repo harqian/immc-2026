@@ -17,6 +17,11 @@ TENSOR_PATH = OUTPUTS_DIR / "risk_tensor.npz"
 COMPOSITE_PATH = OUTPUTS_DIR / "composite_risk.geojson"
 SPECIES_NAMES = np.array(["elephant", "rhino", "lion", "herbivore"], dtype="U16")
 THREAT_NAMES = np.array(["poaching", "wildfire", "tourism"], dtype="U16")
+RISK_HEATMAP_WEIGHTS = {
+    "poaching": 1.0,
+    "wildfire": 1.5,
+    "tourism": 0.5,
+}
 
 
 def load_inputs() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoDataFrame]:
@@ -86,10 +91,17 @@ def build_tensor(species: gpd.GeoDataFrame, threats: gpd.GeoDataFrame) -> tuple[
     )
     tensor = species_matrix[:, :, None] * threat_matrix[:, None, :]
 
-    merged["composite_risk_norm"] = tensor.mean(axis=(1, 2))
     merged["poaching_risk_norm"] = tensor[:, :, 0].mean(axis=1)
     merged["wildfire_risk_norm"] = tensor[:, :, 1].mean(axis=1)
     merged["tourism_risk_norm"] = tensor[:, :, 2].mean(axis=1)
+    weight_total = sum(RISK_HEATMAP_WEIGHTS.values())
+    if weight_total <= 0:
+        raise ValueError("RISK_HEATMAP_WEIGHTS must sum to a positive value")
+    merged["composite_risk_norm"] = (
+        merged["poaching_risk_norm"] * RISK_HEATMAP_WEIGHTS["poaching"]
+        + merged["wildfire_risk_norm"] * RISK_HEATMAP_WEIGHTS["wildfire"]
+        + merged["tourism_risk_norm"] * RISK_HEATMAP_WEIGHTS["tourism"]
+    ) / weight_total
     merged["tourism_interaction_norm"] = merged["tourism_threat_norm"]
     return tensor, merged
 
@@ -108,6 +120,8 @@ def write_tensor(tensor: np.ndarray, merged: gpd.GeoDataFrame) -> None:
             "tourism": "tourism_pressure_norm",
         },
         "tensor_definition": "tensor[cell, species, threat] = species_presence_norm * threat_exposure_norm",
+        "risk_heatmap_weights": RISK_HEATMAP_WEIGHTS,
+        "composite_definition": "composite_risk_norm = weighted_mean(poaching_risk_norm, wildfire_risk_norm, tourism_risk_norm)",
     }
     np.savez(
         TENSOR_PATH,

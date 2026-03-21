@@ -2,17 +2,20 @@
 from __future__ import annotations
 
 import argparse
+import json
 
 import branca.colormap as bcm
 import folium
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from _spatial_common import OUTPUTS_DIR, PROCESSED_DIR, validate_geojson, validate_parquet
 
 
 COMPOSITE_PATH = OUTPUTS_DIR / "composite_risk.geojson"
 THREATS_PATH = OUTPUTS_DIR / "threat_layers.parquet"
+TENSOR_PATH = OUTPUTS_DIR / "risk_tensor.npz"
 HEATMAPS_PATH = OUTPUTS_DIR / "risk_heatmaps.png"
 INTERACTIVE_MAP_PATH = OUTPUTS_DIR / "interactive_map.html"
 BOUNDARY_PATH = PROCESSED_DIR / "etosha_boundary.geojson"
@@ -57,6 +60,17 @@ def load_inputs() -> dict[str, gpd.GeoDataFrame]:
     }
 
 
+def load_risk_heatmap_weights() -> dict[str, float]:
+    if not TENSOR_PATH.is_file():
+        raise FileNotFoundError(f"missing output: {TENSOR_PATH}")
+    tensor = np.load(TENSOR_PATH, allow_pickle=False)
+    metadata = json.loads(str(tensor["metadata"]))
+    weights = metadata.get("risk_heatmap_weights")
+    if not isinstance(weights, dict):
+        raise ValueError("risk tensor metadata is missing risk_heatmap_weights")
+    return {name: float(value) for name, value in weights.items()}
+
+
 def render_static(inputs: dict[str, gpd.GeoDataFrame]) -> None:
     composite = inputs["composite"]
     boundary = inputs["boundary"]
@@ -65,13 +79,14 @@ def render_static(inputs: dict[str, gpd.GeoDataFrame]) -> None:
     camps = inputs["camps"]
     roads = inputs["roads"]
     waterholes = inputs["waterholes"]
+    weights = load_risk_heatmap_weights()
 
     fig, axes = plt.subplots(2, 2, figsize=(16, 11))
     plots = [
         ("composite_risk_norm", "composite risk", "YlOrRd"),
-        ("poaching_risk_norm", "poaching risk", "YlOrRd"),
-        ("wildfire_risk_norm", "wildfire risk", "YlOrRd"),
-        ("tourism_risk_norm", "tourism risk", "YlOrRd"),
+        ("poaching_risk_norm", f"poaching risk (w={weights['poaching']:g})", "YlOrRd"),
+        ("wildfire_risk_norm", f"wildfire risk (w={weights['wildfire']:g})", "YlOrRd"),
+        ("tourism_risk_norm", f"tourism risk (w={weights['tourism']:g})", "YlOrRd"),
     ]
     for ax, (column, title, cmap) in zip(axes.ravel(), plots):
         composite.plot(
