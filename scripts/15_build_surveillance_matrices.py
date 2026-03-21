@@ -28,7 +28,9 @@ INTERVENTION_DEDUP_DISTANCE_M = 7500.0
 METRIC_CRS = "EPSG:32733"
 FIRE_BREAKPOINT_STEPS_MIN = [0.0, 15.0, 30.0, 60.0, 90.0]
 MIN_RESPONSE_TIME_MIN = 0.5
-MAX_FIRE_EXPONENT = 20.0
+FIRE_PENALTY_PLATEAU_AFTER_THRESHOLD_MIN = 90.0
+FIRE_PENALTY_CEILING_DELAY_MIN = 60.0
+FIRE_SIGMOID_STEEPNESS = 10.0
 
 
 def load_bundle_parts(scenario_id: str) -> tuple[dict[str, object], dict[str, object], dict[str, dict[str, object]]]:
@@ -197,6 +199,27 @@ def normalize(values: np.ndarray) -> np.ndarray:
     if value_max <= value_min:
         return np.zeros_like(values)
     return (values - value_min) / (value_max - value_min)
+
+
+def bounded_fire_delay_penalty(
+    response_time_min: float | np.ndarray,
+    tau_fire_min: float,
+    beta_fire: float,
+    plateau_time_min: float,
+) -> float | np.ndarray:
+    values = np.asarray(response_time_min, dtype=float)
+    plateau_time_min = max(float(plateau_time_min), tau_fire_min + 1e-6)
+    plateau_penalty = np.expm1(beta_fire * min(FIRE_PENALTY_CEILING_DELAY_MIN, plateau_time_min - tau_fire_min))
+
+    scaled_delay = np.clip((values - tau_fire_min) / (plateau_time_min - tau_fire_min), 0.0, 1.0)
+    sigmoid = 1.0 / (1.0 + np.exp(-FIRE_SIGMOID_STEEPNESS * (scaled_delay - 0.5)))
+    sigmoid_floor = 1.0 / (1.0 + np.exp(FIRE_SIGMOID_STEEPNESS / 2.0))
+    sigmoid_ceiling = 1.0 / (1.0 + np.exp(-FIRE_SIGMOID_STEEPNESS / 2.0))
+    normalized = np.clip((sigmoid - sigmoid_floor) / (sigmoid_ceiling - sigmoid_floor), 0.0, 1.0)
+    penalty = np.where(values <= tau_fire_min, 0.0, plateau_penalty * normalized)
+    if np.isscalar(response_time_min):
+        return float(penalty)
+    return penalty
 
 
 def build_coverage_matrix(
@@ -401,15 +424,13 @@ def build_fire_delay_breakpoints(response_time_matrix: pd.DataFrame, availabilit
         min(float(feasible_times.quantile(0.99)), tau_fire_min + 180.0),
         tau_fire_min + FIRE_BREAKPOINT_STEPS_MIN[-1],
     )
+    plateau_time = min(max_time, tau_fire_min + FIRE_PENALTY_PLATEAU_AFTER_THRESHOLD_MIN)
     raw_breakpoints = [0.0, tau_fire_min] + [tau_fire_min + step for step in FIRE_BREAKPOINT_STEPS_MIN[1:]] + [max_time]
     breakpoints: list[float] = []
     for point in raw_breakpoints:
         if not breakpoints or point > breakpoints[-1]:
             breakpoints.append(point)
-    penalties = [
-        np.exp(min(beta_fire * max(0.0, point - tau_fire_min), MAX_FIRE_EXPONENT)) - 1.0
-        for point in breakpoints
-    ]
+    penalties = [bounded_fire_delay_penalty(point, tau_fire_min, beta_fire, plateau_time) for point in breakpoints]
     return pd.DataFrame(
         {
             "scenario_id": scenario_id,

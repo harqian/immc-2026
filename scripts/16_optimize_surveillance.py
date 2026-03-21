@@ -44,6 +44,9 @@ MOBILE_ASSETS = ("person", "car", "drone")
 CAMERA_ASSET = "camera"
 SELECTED_ALPHA_INDEX = 1
 METRIC_CRS = "EPSG:32733"
+FIRE_PENALTY_PLATEAU_AFTER_THRESHOLD_MIN = 90.0
+FIRE_PENALTY_CEILING_DELAY_MIN = 60.0
+FIRE_SIGMOID_STEEPNESS = 10.0
 
 
 @dataclass
@@ -318,11 +321,24 @@ def augment_fire_breakpoints(
     lambda_fire: float,
     scenario_id: str,
 ) -> pd.DataFrame:
+    def bounded_fire_delay_penalty(response_time_min: float, plateau_time_min: float) -> float:
+        plateau_time_min = max(float(plateau_time_min), tau_fire_min + 1e-6)
+        plateau_penalty = np.expm1(beta_fire * min(FIRE_PENALTY_CEILING_DELAY_MIN, plateau_time_min - tau_fire_min))
+        scaled_delay = np.clip((response_time_min - tau_fire_min) / (plateau_time_min - tau_fire_min), 0.0, 1.0)
+        sigmoid = 1.0 / (1.0 + np.exp(-FIRE_SIGMOID_STEEPNESS * (scaled_delay - 0.5)))
+        sigmoid_floor = 1.0 / (1.0 + np.exp(FIRE_SIGMOID_STEEPNESS / 2.0))
+        sigmoid_ceiling = 1.0 / (1.0 + np.exp(-FIRE_SIGMOID_STEEPNESS / 2.0))
+        normalized = np.clip((sigmoid - sigmoid_floor) / (sigmoid_ceiling - sigmoid_floor), 0.0, 1.0)
+        if response_time_min <= tau_fire_min:
+            return 0.0
+        return float(plateau_penalty * normalized)
+
     max_response = max(float(response_rows["response_time_min"].max()), MAX_RESPONSE_HORIZON_MIN)
     rows = breakpoints.copy()
     last_time = float(rows["response_time_min"].max())
     if max_response > last_time:
-        penalty = np.exp(min(beta_fire * max(0.0, max_response - tau_fire_min), 20.0)) - 1.0
+        plateau_time = min(max_response, tau_fire_min + FIRE_PENALTY_PLATEAU_AFTER_THRESHOLD_MIN)
+        penalty = bounded_fire_delay_penalty(max_response, plateau_time)
         rows = pd.concat(
             [
                 rows,
@@ -517,7 +533,7 @@ def build_model(
 
 def solve_model(model: pyo.ConcreteModel) -> None:
     solver = pyo.SolverFactory("highs")
-    solver.options["time_limit"] = 60.0
+    solver.options["time_limit"] = 180.0
     solver.options["mip_rel_gap"] = 0.05
     result = solver.solve(model, tee=False)
     termination = str(result.solver.termination_condition).lower()

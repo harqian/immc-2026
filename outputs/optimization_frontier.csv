@@ -1,4 +1,4 @@
 scenario_id,alpha,coverage_target,achieved_protection,response_objective,budget_used,tourism_penalty_used,selected_site_count,selected_people,selected_cars,selected_drones,selected_cameras,locked_down_waterholes,selected_interventions
-etosha_placeholder_baseline,1.0,84.85836416030536,84.85836416030536,3397207279.4852114,11965.0,400.0,22,12,5,3,10,2,1
-etosha_placeholder_baseline,0.95,80.61544595229009,80.62338425828045,2246950133.750923,11140.0,400.0,20,12,5,3,0,0,1
-etosha_placeholder_baseline,0.9,76.37252774427482,76.38633867398738,1973006313.7764585,10840.0,400.0,20,12,5,3,0,0,1
+etosha_placeholder_baseline,1.0,84.85836416030536,84.85836416030537,103645.58697098315,11965.0,400.0,22,12,5,3,10,2,1
+etosha_placeholder_baseline,0.95,80.61544595229009,80.62338425828045,78064.8667390421,11140.0,400.0,20,12,5,3,0,0,1
+etosha_placeholder_baseline,0.9,76.37252774427482,76.50080931972934,72084.61017302527,10990.0,400.0,20,12,5,3,0,0,1
