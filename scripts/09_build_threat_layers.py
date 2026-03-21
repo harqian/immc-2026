@@ -21,12 +21,6 @@ POACHING_WEIGHTS = {
     "surveillance_gap": 0.08,
     "rhino_value": 0.18,
 }
-WILDFIRE_WEIGHTS = {
-    "history": 0.40,
-    "fuel_support": 0.25,
-    "pan_buffer": 0.20,
-    "edge_exposure": 0.15,
-}
 TOURISM_WEIGHTS = {
     "tourist_road_access": 0.35,
     "camp_access": 0.25,
@@ -103,17 +97,16 @@ def build_poaching(df: gpd.GeoDataFrame) -> tuple[np.ndarray, dict[str, np.ndarr
 
 
 def build_wildfire(df: gpd.GeoDataFrame) -> tuple[np.ndarray, dict[str, np.ndarray]]:
-    history = np.minimum(df["historical_fire_event_count"].to_numpy(), 1).astype(float)
-    fuel_support = (0.6 * df["herbivore_support_norm"].to_numpy() + 0.4 * df["elephant_density_norm"].to_numpy()).clip(0.0, 1.0)
-    pan_buffer = (1.0 - df["pan_overlap_ratio"].to_numpy()).clip(0.0, 1.0)
-    edge_exposure = bounded_access(df["dist_to_boundary_m"].to_numpy(), 18000.0)
+    recent_fire_suppression = 1.0 - 0.7 * np.minimum(df["historical_fire_event_count"].to_numpy(), 1).astype(float)
+    flammable_land = (1.0 - df["pan_overlap_ratio"].to_numpy()).clip(0.0, 1.0)
+    water_remoteness = 1.0 - bounded_access(df["dist_to_waterhole_m"].to_numpy(), 18000.0)
     components = {
-        "history": history,
-        "fuel_support": fuel_support,
-        "pan_buffer": pan_buffer,
-        "edge_exposure": edge_exposure,
+        "recent_fire_suppression": recent_fire_suppression,
+        "flammable_land": flammable_land,
+        "water_remoteness": water_remoteness,
     }
-    score = sum(WILDFIRE_WEIGHTS[name] * values for name, values in components.items())
+    base = 0.60 * flammable_land + 0.40 * water_remoteness
+    score = base * recent_fire_suppression
     return score.clip(0.0, 1.0), components
 
 
@@ -159,7 +152,7 @@ def build_threat_layers(features: gpd.GeoDataFrame, species: gpd.GeoDataFrame) -
         merged[f"tourism_{name}"] = values
 
     merged["poaching_formula"] = "0.24*gate + 0.24*boundary + 0.18*road + 0.08*tourist_road + 0.08*surveillance_gap + 0.18*rhino"
-    merged["wildfire_formula"] = "0.40*history + 0.25*fuel + 0.20*pan_buffer + 0.15*edge"
+    merged["wildfire_formula"] = "wildfire=(0.60*flammable_land + 0.40*water_remoteness) * recent_fire_suppression"
     merged["tourism_formula"] = "pressure=(0.35*tourist_road + 0.25*camp + 0.15*gate + 0.25*waterhole); threat=pressure*wildlife_presence"
 
     return merged

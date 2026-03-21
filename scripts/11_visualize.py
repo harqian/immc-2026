@@ -68,16 +68,18 @@ def render_static(inputs: dict[str, gpd.GeoDataFrame]) -> None:
 
     fig, axes = plt.subplots(2, 2, figsize=(16, 11))
     plots = [
-        ("composite_risk_norm", "composite risk", "magma"),
-        ("poaching_risk_norm", "poaching risk", "Reds"),
-        ("wildfire_risk_norm", "wildfire risk", "YlOrBr"),
-        ("tourism_risk_norm", "tourism risk", "PuRd"),
+        ("composite_risk_norm", "composite risk", "YlOrRd"),
+        ("poaching_risk_norm", "poaching risk", "YlOrRd"),
+        ("wildfire_risk_norm", "wildfire risk", "YlOrRd"),
+        ("tourism_risk_norm", "tourism risk", "YlOrRd"),
     ]
     for ax, (column, title, cmap) in zip(axes.ravel(), plots):
         composite.plot(
             ax=ax,
             column=column,
             cmap=cmap,
+            vmin=0.0,
+            vmax=1.0,
             linewidth=0.1,
             edgecolor="#d0d0d0",
             legend=True,
