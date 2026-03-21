@@ -535,9 +535,9 @@ Model artificial waterholes as proactive interventions that can change wildlife 
 ### Success Criteria
 
 #### Automated Verification
-- [ ] every intervention candidate has explicit monetary and tourism-cost terms
-- [ ] every intervention candidate has an explicit density-dispersion benefit term
-- [ ] intervention effects do not create negative density or invalid risk values
+- [x] every intervention candidate has explicit monetary and tourism-cost terms
+- [x] every intervention candidate has an explicit density-dispersion benefit term
+- [x] intervention effects do not create negative density or invalid risk values
 
 #### Manual Verification
 - [ ] selected artificial waterholes improve local protection benefit structure rather than simply deleting wildlife value
