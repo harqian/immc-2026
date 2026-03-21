@@ -13,11 +13,20 @@ environment instead of the global interpreter:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-python scripts/01_build_manifest.py
-python scripts/00_validate_environment.py
-python scripts/04_digitize_reference_maps.py
-python scripts/01_build_manifest.py --check
+python3 -m pip install -r requirements.txt
+python3 scripts/01_build_manifest.py
+python3 scripts/00_validate_environment.py
+python3 scripts/04_digitize_reference_maps.py
+python3 scripts/01_build_manifest.py --check
+```
+
+the optimization layer adds `pyomo`, `highspy`, and yaml-backed scenario/config parsing.
+phase 1 validation is currently:
+
+```bash
+source .venv/bin/activate
+python3 scripts/16_optimize_surveillance.py --validate-only
+python3 scripts/18_validate_optimization_outputs.py
 ```
 
 ## current repo contract

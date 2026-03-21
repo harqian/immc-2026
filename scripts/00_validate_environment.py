@@ -32,17 +32,20 @@ REQUIRED_MODULES = [
     "contextily",
     "folium",
     "geopandas",
+    "highspy",
     "matplotlib",
     "numpy",
     "pandas",
     "PIL",
     "pyarrow",
     "pyogrio",
+    "pyomo.environ",
     "pyproj",
     "rasterio",
     "requests",
     "scipy",
     "shapely",
+    "yaml",
 ]
 
 

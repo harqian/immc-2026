@@ -1,0 +1,58 @@
+asset_types:
+  - asset_type: person
+    unit_cost: 120.0
+    coverage_radius_m: 2500.0
+    response_speed_kmh: 6.0
+    site_eligibility:
+      - waterhole
+      - camp
+      - gate
+      - high_risk_cell
+      - manual_override
+    terrain_modifier_profile: foot
+    max_units_per_site: 8
+    counts_toward_budget: true
+    camera_bundle_size: 0
+    risk_suppression_factor: 0.0
+  - asset_type: car
+    unit_cost: 450.0
+    coverage_radius_m: 7000.0
+    response_speed_kmh: 28.0
+    site_eligibility:
+      - waterhole
+      - camp
+      - gate
+      - high_risk_cell
+      - manual_override
+    terrain_modifier_profile: car
+    max_units_per_site: 4
+    counts_toward_budget: true
+    camera_bundle_size: 0
+    risk_suppression_factor: 0.0
+  - asset_type: drone
+    unit_cost: 800.0
+    coverage_radius_m: 12000.0
+    response_speed_kmh: 55.0
+    site_eligibility:
+      - waterhole
+      - camp
+      - gate
+      - high_risk_cell
+      - manual_override
+    terrain_modifier_profile: drone
+    max_units_per_site: 3
+    counts_toward_budget: true
+    camera_bundle_size: 0
+    risk_suppression_factor: 0.0
+  - asset_type: camera
+    unit_cost: 90.0
+    coverage_radius_m: 75.0
+    response_speed_kmh: 0.0
+    site_eligibility:
+      - waterhole
+      - manual_override
+    terrain_modifier_profile: camera_visibility
+    max_units_per_site: 10
+    counts_toward_budget: true
+    camera_bundle_size: 5
+    risk_suppression_factor: 0.35

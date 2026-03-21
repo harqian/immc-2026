@@ -12,3 +12,6 @@ scipy
 folium
 matplotlib
 contextily
+pyomo
+highspy
+pyyaml
