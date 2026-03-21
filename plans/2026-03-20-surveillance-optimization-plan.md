@@ -390,9 +390,9 @@ Add the minimum files, parameters, and dependencies needed for optimization work
 ### Success Criteria
 
 #### Automated Verification
-- [ ] dependency install succeeds in the project venv
-- [ ] config files parse and validate
-- [ ] missing required config keys fail loudly
+- [x] dependency install succeeds in the project venv
+- [x] config files parse and validate
+- [x] missing required config keys fail loudly
 
 #### Manual Verification
 - [ ] the temporary parameter files are clear enough to be replaced by the real data later
@@ -438,10 +438,10 @@ Create a finite deployment search space for the optimizer. Candidate sites shoul
 ### Success Criteria
 
 #### Automated Verification
-- [ ] `surveillance_candidate_sites.geojson` is written successfully
-- [ ] every site has a unique `site_id`
-- [ ] every site has at least one allowed asset type
-- [ ] every site lies within or plausibly adjacent to the park boundary
+- [x] `surveillance_candidate_sites.geojson` is written successfully
+- [x] every site has a unique `site_id`
+- [x] every site has at least one allowed asset type
+- [x] every site lies within or plausibly adjacent to the park boundary
 
 #### Manual Verification
 - [ ] inspect the site map and confirm most candidates cluster around operationally plausible locations
