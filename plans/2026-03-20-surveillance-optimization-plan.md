@@ -732,13 +732,13 @@ sum_c protection_benefit_after_interventions[c] * y[c] >= alpha * protection_max
 ### Success Criteria
 
 #### Automated Verification
-- [ ] the model builds successfully for the temporary example scenario
-- [ ] the solver returns a feasible solution for at least one temporary scenario
-- [ ] the budget and count-cap constraints are satisfied in the emitted solution
-- [ ] the frontier table contains monotone coverage targets and valid response values
-- [ ] camera deployments only create protection-gain effects at eligible waterholes
-- [ ] the fire-delay penalty increases sharply only after `tau_fire_min`
-- [ ] artificial-waterhole interventions apply both their intended wildlife-facing benefit and their tourism/infrastructure cost
+- [x] the model builds successfully for the temporary example scenario
+- [x] the solver returns a feasible solution for at least one temporary scenario
+- [x] the budget and count-cap constraints are satisfied in the emitted solution
+- [x] the frontier table contains monotone coverage targets and valid response values
+- [x] camera deployments only create protection-gain effects at eligible waterholes
+- [x] the fire-delay penalty increases sharply only after `tau_fire_min`
+- [x] artificial-waterhole interventions apply both their intended wildlife-facing benefit and their tourism/infrastructure cost
 
 #### Manual Verification
 - [ ] increasing budget or asset counts improves at least one objective in a sensible way

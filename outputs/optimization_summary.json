@@ -1,0 +1,85 @@
+{
+  "scenario_id": "etosha_placeholder_baseline",
+  "recommended_alpha": 0.95,
+  "available_budget": 12000.0,
+  "available_caps": {
+    "people": 12,
+    "cars": 5,
+    "drones": 3,
+    "cameras": 20
+  },
+  "frontier_points": [
+    {
+      "scenario_id": "etosha_placeholder_baseline",
+      "alpha": 1.0,
+      "coverage_target": 84.85836416030536,
+      "achieved_protection": 84.85836416030536,
+      "response_objective": 3397207279.4852114,
+      "budget_used": 11965.0,
+      "tourism_penalty_used": 400.0,
+      "selected_site_count": 22,
+      "selected_people": 12,
+      "selected_cars": 5,
+      "selected_drones": 3,
+      "selected_cameras": 10,
+      "locked_down_waterholes": 2,
+      "selected_interventions": 1
+    },
+    {
+      "scenario_id": "etosha_placeholder_baseline",
+      "alpha": 0.95,
+      "coverage_target": 80.61544595229009,
+      "achieved_protection": 80.62338425828045,
+      "response_objective": 2246950133.750923,
+      "budget_used": 11140.0,
+      "tourism_penalty_used": 400.0,
+      "selected_site_count": 20,
+      "selected_people": 12,
+      "selected_cars": 5,
+      "selected_drones": 3,
+      "selected_cameras": 0,
+      "locked_down_waterholes": 0,
+      "selected_interventions": 1
+    },
+    {
+      "scenario_id": "etosha_placeholder_baseline",
+      "alpha": 0.9,
+      "coverage_target": 76.37252774427482,
+      "achieved_protection": 76.38633867398738,
+      "response_objective": 1973006313.7764585,
+      "budget_used": 10840.0,
+      "tourism_penalty_used": 400.0,
+      "selected_site_count": 20,
+      "selected_people": 12,
+      "selected_cars": 5,
+      "selected_drones": 3,
+      "selected_cameras": 0,
+      "locked_down_waterholes": 0,
+      "selected_interventions": 1
+    }
+  ],
+  "chosen_solution": {
+    "scenario_id": "etosha_placeholder_baseline",
+    "alpha": 0.95,
+    "coverage_target": 80.61544595229009,
+    "achieved_protection": 80.62338425828045,
+    "response_objective": 2246950133.750923,
+    "budget_used": 11140.0,
+    "tourism_penalty_used": 400.0,
+    "selected_site_count": 20,
+    "selected_people": 12,
+    "selected_cars": 5,
+    "selected_drones": 3,
+    "selected_cameras": 0,
+    "locked_down_waterholes": 0,
+    "selected_interventions": 1
+  },
+  "selected_interventions": [
+    {
+      "intervention_site_id": "artificial-waterhole-01",
+      "capital_cost": 2500.0,
+      "tourism_cost": 400.0,
+      "protection_benefit_gain": 0.1644598096847149
+    }
+  ]
+}
