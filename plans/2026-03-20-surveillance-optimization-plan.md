@@ -609,12 +609,12 @@ If road-network routing is not yet implemented, the response-time matrix should 
 ### Success Criteria
 
 #### Automated Verification
-- [ ] coverage matrix row count matches `sites x cells x asset_types`
-- [ ] response-time matrix row count matches all mobile asset/site/cell combinations
-- [ ] all response times are positive and finite where defined
-- [ ] cameras are excluded cleanly from response-time calculations
-- [ ] camera protection-gain influence is present for waterhole sites and absent elsewhere unless explicitly allowed
-- [ ] fire-delay penalty inputs are present and consistent with the chosen thresholded approximation
+- [x] coverage matrix row count matches `sites x cells x asset_types`
+- [x] response-time matrix row count matches all mobile asset/site/cell combinations
+- [x] all response times are positive and finite where defined
+- [x] cameras are excluded cleanly from response-time calculations
+- [x] camera protection-gain influence is present for waterhole sites and absent elsewhere unless explicitly allowed
+- [x] fire-delay penalty inputs are present and consistent with the chosen thresholded approximation
 
 #### Manual Verification
 - [ ] nearby cells have lower response times than distant cells
