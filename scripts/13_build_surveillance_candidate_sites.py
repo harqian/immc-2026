@@ -36,6 +36,16 @@ GRID_FEATURES_PATH = OUTPUTS_DIR / "grid_features.parquet"
 METRIC_CRS = "EPSG:32733"
 ADJACENT_BOUNDARY_BUFFER_M = 5000.0
 CAR_ACCESS_DISTANCE_THRESHOLD_M = 6000.0
+CENTROID_SCHEMA_COLUMNS = [
+    "cell_id",
+    "metric_crs",
+    "grid_version",
+    "cell_target_area_m2",
+    "hex_side_length_m",
+    "cell_area_m2",
+    "centroid_x_m",
+    "centroid_y_m",
+]
 SITE_KIND_PRIORITY = {
     "camp": 1.0,
     "gate": 0.96,
@@ -77,17 +87,7 @@ def load_inputs() -> dict[str, gpd.GeoDataFrame]:
         ),
         "centroids": validate_geojson(
             GRID_CENTROIDS_PATH,
-            [
-                "cell_id",
-                "grid_size_m",
-                "metric_crs",
-                "grid_version",
-                "cell_area_m2",
-                "centroid_x_m",
-                "centroid_y_m",
-                "row_index",
-                "col_index",
-            ],
+            CENTROID_SCHEMA_COLUMNS,
             "grid centroids",
         ),
         "features": validate_parquet(

@@ -253,11 +253,11 @@ make the optimization-prep layer consume the regenerated hex grid artifacts with
 ### Success Criteria
 
 #### Automated Verification
-- [ ] `act && python3 scripts/13_build_surveillance_candidate_sites.py --scenario-id etosha_placeholder_baseline`
-- [ ] `act && python3 scripts/14_build_terrain_costs.py --scenario-id etosha_placeholder_baseline`
-- [ ] `act && python3 scripts/15_build_surveillance_matrices.py --scenario-id etosha_placeholder_baseline`
-- [ ] `act && python3 scripts/16_optimize_surveillance.py --validate-only`
-- [ ] `act && python3 scripts/18_validate_optimization_outputs.py`
+- [x] `act && python3 scripts/13_build_surveillance_candidate_sites.py --scenario-id etosha_placeholder_baseline`
+- [x] `act && python3 scripts/14_build_terrain_costs.py --scenario-id etosha_placeholder_baseline`
+- [x] `act && python3 scripts/15_build_surveillance_matrices.py --scenario-id etosha_placeholder_baseline`
+- [x] `act && python3 scripts/16_optimize_surveillance.py --validate-only`
+- [x] `act && python3 scripts/18_validate_optimization_outputs.py`
 
 #### Manual Verification
 - [ ] inspect regenerated candidate and intervention outputs to confirm they reference valid hex-grid-derived cell IDs

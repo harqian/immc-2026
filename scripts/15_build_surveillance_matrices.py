@@ -31,6 +31,16 @@ MIN_RESPONSE_TIME_MIN = 0.5
 FIRE_PENALTY_PLATEAU_AFTER_THRESHOLD_MIN = 90.0
 FIRE_PENALTY_CEILING_DELAY_MIN = 60.0
 FIRE_SIGMOID_STEEPNESS = 10.0
+CENTROID_SCHEMA_COLUMNS = [
+    "cell_id",
+    "metric_crs",
+    "grid_version",
+    "cell_target_area_m2",
+    "hex_side_length_m",
+    "cell_area_m2",
+    "centroid_x_m",
+    "centroid_y_m",
+]
 
 
 def load_bundle_parts(scenario_id: str) -> tuple[dict[str, object], dict[str, object], dict[str, dict[str, object]]]:
@@ -73,17 +83,7 @@ def load_inputs() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoDataFrame]
     )
     centroids = validate_geojson(
         GRID_CENTROIDS_PATH,
-        [
-            "cell_id",
-            "grid_size_m",
-            "metric_crs",
-            "grid_version",
-            "cell_area_m2",
-            "centroid_x_m",
-            "centroid_y_m",
-            "row_index",
-            "col_index",
-        ],
+        CENTROID_SCHEMA_COLUMNS,
         "grid centroids",
     )
     return sites, terrain, centroids
