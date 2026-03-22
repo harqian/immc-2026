@@ -292,9 +292,9 @@ rebuild visualization artifacts from regenerated geometry and confirm the render
 ### Success Criteria
 
 #### Automated Verification
-- [ ] `act && python3 scripts/11_visualize.py`
-- [ ] `act && python3 scripts/17_visualize_optimization.py`
-- [ ] both visualization scripts pass their built-in output checks
+- [x] `act && python3 scripts/11_visualize.py`
+- [x] `act && python3 scripts/17_visualize_optimization.py`
+- [x] both visualization scripts pass their built-in output checks
 
 #### Manual Verification
 - [ ] open [`outputs/risk_heatmaps.png`](/Users/hq/code/immc-risk-intervention/outputs/risk_heatmaps.png) and confirm the filled cells are visibly hexagonal
