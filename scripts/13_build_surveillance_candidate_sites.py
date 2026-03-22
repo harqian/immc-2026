@@ -218,6 +218,7 @@ def assign_support_flags(candidates: gpd.GeoDataFrame, asset_types: list[dict[st
     flagged["supports_cars"] = False
     flagged["supports_drones"] = False
     flagged["supports_cameras"] = False
+    car_profile_columns: set[str] = set()
 
     for asset in asset_types:
         asset_type = str(asset["asset_type"])
@@ -231,10 +232,13 @@ def assign_support_flags(candidates: gpd.GeoDataFrame, asset_types: list[dict[st
         if support_column is None:
             continue
         flagged[support_column] = flagged["site_kind"].isin(eligible_kinds)
+        if str(asset["terrain_modifier_profile"]) == "car":
+            car_profile_columns.add(support_column)
 
-    flagged["supports_cars"] = flagged["supports_cars"] & (
-        flagged["dist_to_road_m"] <= CAR_ACCESS_DISTANCE_THRESHOLD_M
-    )
+    for support_column in sorted(car_profile_columns):
+        flagged[support_column] = flagged[support_column] & (
+            flagged["dist_to_road_m"] <= CAR_ACCESS_DISTANCE_THRESHOLD_M
+        )
     return flagged
 
 

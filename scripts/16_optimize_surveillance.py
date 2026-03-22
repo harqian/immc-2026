@@ -49,6 +49,14 @@ FIRE_PENALTY_CEILING_DELAY_MIN = 60.0
 FIRE_SIGMOID_STEEPNESS = 10.0
 
 
+INCLUDED_ASSET_KEYS = {
+    "person": "included_people",
+    "car": "included_cars",
+    "drone": "included_drones",
+    "camera": "included_cameras",
+}
+
+
 @dataclass
 class OptimizationData:
     scenario_id: str
@@ -79,6 +87,10 @@ class OptimizationData:
     fire_bp_ids: list[int]
     fire_bp_time: dict[int, float]
     fire_bp_penalty: dict[int, float]
+
+
+class FrontierSolveTimeoutError(RuntimeError):
+    pass
 
 
 def load_optimization_inputs(scenario_id: str) -> OptimizationData:
@@ -380,6 +392,7 @@ def build_model(
     model.site_active = pyo.Var(model.SITES, domain=pyo.Binary)
     model.asset_active = pyo.Var(model.SITE_ASSETS, domain=pyo.Binary)
     model.x = pyo.Var(model.SITE_ASSETS, domain=pyo.NonNegativeIntegers)
+    model.excess_assets = pyo.Var(sorted(INCLUDED_ASSET_KEYS), domain=pyo.NonNegativeReals)
     model.y = pyo.Var(model.CELLS, domain=pyo.Binary)
     model.z = pyo.Var(model.RESPONSE_ARCS, domain=pyo.Binary)
     model.dummy = pyo.Var(model.CELLS, domain=pyo.Binary)
@@ -422,9 +435,17 @@ def build_model(
     model.camera_active = pyo.Constraint(model.WATERHOLE_SITES, rule=camera_active_rule)
 
     budget_terms = []
-    for site_id, asset_type in data.site_pairs:
+    model.excess_asset_balance = pyo.ConstraintList()
+    for asset_type, included_key in INCLUDED_ASSET_KEYS.items():
+        applicable = [(site_id, a) for site_id, a in data.site_pairs if a == asset_type]
+        if not applicable:
+            model.excess_asset_balance.add(model.excess_assets[asset_type] >= 0.0)
+            continue
+        total_units = sum(model.x[pair] for pair in applicable)
+        included_units = float(data.availability[included_key])
+        model.excess_asset_balance.add(model.excess_assets[asset_type] >= total_units - included_units)
         unit_cost = float(data.asset_types[asset_type]["unit_cost"])
-        budget_terms.append(unit_cost * model.x[site_id, asset_type])
+        budget_terms.append(unit_cost * model.excess_assets[asset_type])
     for site_id in model.SITES:
         budget_terms.append(float(site_rows.loc[site_id, "base_cost_fixed"]) * model.site_active[site_id])
     for intervention_id in model.INTERVENTIONS:
@@ -441,6 +462,8 @@ def build_model(
     model.asset_caps = pyo.ConstraintList()
     for asset_type, cap in cap_map.items():
         applicable = [(site_id, a) for site_id, a in data.site_pairs if a == asset_type]
+        if not applicable:
+            continue
         model.asset_caps.add(sum(model.x[pair] for pair in applicable) <= cap)
 
     def coverage_rule(model: pyo.ConcreteModel, cell_id: str):
@@ -531,14 +554,21 @@ def build_model(
     return model, model.objective
 
 
-def solve_model(model: pyo.ConcreteModel) -> None:
+def solve_model(model: pyo.ConcreteModel) -> tuple[str, bool]:
     solver = pyo.SolverFactory("highs")
     solver.options["time_limit"] = 180.0
     solver.options["mip_rel_gap"] = 0.05
     result = solver.solve(model, tee=False)
     termination = str(result.solver.termination_condition).lower()
-    if "optimal" not in termination and "feasible" not in termination and "maxtimelimit" not in termination:
+    has_solution = len(result.solution) > 0
+    if "maxtimelimit" in termination or "timelimit" in termination:
+        raise FrontierSolveTimeoutError(
+            f"optimization solve hit time limit with termination={result.solver.termination_condition} "
+            f"and has_solution={has_solution}"
+        )
+    if "optimal" not in termination and "feasible" not in termination:
         raise RuntimeError(f"optimization solve failed with termination condition: {result.solver.termination_condition}")
+    return termination, has_solution
 
 
 def extract_solution(
@@ -617,10 +647,16 @@ def extract_solution(
     budget_total = 0.0
     for _, row in selected_solution.iterrows():
         budget_total += float(row["base_cost_fixed"])
-        budget_total += row["people_count"] * float(data.asset_types["person"]["unit_cost"])
-        budget_total += row["car_count"] * float(data.asset_types["car"]["unit_cost"])
-        budget_total += row["drone_count"] * float(data.asset_types["drone"]["unit_cost"])
-        budget_total += row["camera_count"] * float(data.asset_types["camera"]["unit_cost"])
+    asset_totals = {
+        "person": int(selected_solution["people_count"].sum()),
+        "car": int(selected_solution["car_count"].sum()),
+        "drone": int(selected_solution["drone_count"].sum()),
+        "camera": int(selected_solution["camera_count"].sum()),
+    }
+    for asset_type, total_units in asset_totals.items():
+        included_units = int(data.availability[INCLUDED_ASSET_KEYS[asset_type]])
+        chargeable_units = max(0, total_units - included_units)
+        budget_total += chargeable_units * float(data.asset_types[asset_type]["unit_cost"])
     selected_intervention_frame = data.interventions[data.interventions["intervention_site_id"].isin(selected_interventions)].copy()
     budget_total += float(selected_intervention_frame["capital_cost"].sum())
     tourism_total = float(selected_intervention_frame["tourism_cost"].sum())
@@ -659,6 +695,9 @@ def write_outputs(
     chosen_solution: dict[str, object],
     data: OptimizationData,
     recommended_alpha: float,
+    *,
+    frontier_status: str = "complete",
+    requested_recommended_alpha: float | None = None,
 ) -> None:
     frontier = pd.DataFrame(frontier_rows).sort_values("alpha", ascending=False)
     frontier.to_csv(FRONTIER_PATH, index=False)
@@ -670,6 +709,10 @@ def write_outputs(
     summary = {
         "scenario_id": data.scenario_id,
         "recommended_alpha": recommended_alpha,
+        "requested_recommended_alpha": (
+            recommended_alpha if requested_recommended_alpha is None else requested_recommended_alpha
+        ),
+        "frontier_status": frontier_status,
         "available_budget": float(data.availability["budget_total"]),
         "available_caps": {
             "people": int(data.availability["max_people"]),
@@ -779,13 +822,30 @@ def main() -> int:
 
     frontier_rows: list[dict[str, object]] = []
     chosen_solution: dict[str, object] | None = None
+    last_solution: dict[str, object] | None = None
     recommended_alpha = choose_recommended_alpha(data.alpha_values)
     for alpha in data.alpha_values:
         print(f"solving response-minimization frontier point alpha={alpha:.2f}")
         response_model, _ = build_model(data, mode="response", coverage_floor=alpha * coverage_max)
-        solve_model(response_model)
+        try:
+            solve_model(response_model)
+        except FrontierSolveTimeoutError as exc:
+            print(f"frontier solve timed out at alpha={alpha:.2f}: {exc}")
+            if last_solution is not None:
+                fallback_alpha = float(last_solution["frontier_row"]["alpha"])
+                write_outputs(
+                    frontier_rows,
+                    chosen_solution or last_solution,
+                    data,
+                    fallback_alpha if chosen_solution is None else recommended_alpha,
+                    frontier_status="partial_timeout",
+                    requested_recommended_alpha=recommended_alpha,
+                )
+                print(f"wrote partial frontier outputs through alpha={fallback_alpha:.2f}")
+            return 2
         extracted = extract_solution(data, response_model, alpha=alpha, coverage_max=coverage_max)
         frontier_rows.append(extracted["frontier_row"])
+        last_solution = extracted
         if np.isclose(alpha, recommended_alpha):
             chosen_solution = extracted
     if chosen_solution is None:

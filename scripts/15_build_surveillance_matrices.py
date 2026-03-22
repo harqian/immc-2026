@@ -201,6 +201,60 @@ def normalize(values: np.ndarray) -> np.ndarray:
     return (values - value_min) / (value_max - value_min)
 
 
+def mobile_terrain_factor(
+    asset_type: str,
+    asset: dict[str, object],
+    terrain_by_cell: pd.DataFrame,
+    human_penalty_norm: np.ndarray,
+    road_distance_norm: np.ndarray,
+    *,
+    response_mode: bool,
+    site_road_norm: np.ndarray | None = None,
+) -> tuple[np.ndarray, str]:
+    profile = str(asset["terrain_modifier_profile"])
+    base_factor = float(asset["terrain_modifier_parameters"]["base_factor"])
+    operability_penalty = float(asset["terrain_modifier_parameters"]["operability_penalty"])
+
+    if profile == "foot":
+        factor = np.clip(
+            base_factor
+            * terrain_by_cell["foot_speed_factor"].to_numpy()
+            * (1.0 - operability_penalty * human_penalty_norm),
+            0.05 if response_mode else 0.0,
+            None if response_mode else 1.5,
+        )
+        return factor, "foot_proxy"
+
+    if profile == "car":
+        factor = (
+            base_factor
+            * terrain_by_cell["car_speed_factor"].to_numpy()
+            * (1.0 - operability_penalty * human_penalty_norm)
+            * (1.0 - 0.35 * road_distance_norm)
+        )
+        if response_mode and site_road_norm is not None:
+            factor = factor * (1.0 - 0.20 * site_road_norm[:, None])
+        factor = np.clip(factor, 0.05 if response_mode else 0.0, None if response_mode else 1.5)
+        label = "car_proxy_euclidean" if asset_type == "car" else "ranger_vehicle_proxy_euclidean"
+        return factor, label
+
+    if profile == "drone":
+        factor = np.clip(
+            base_factor
+            * terrain_by_cell["drone_speed_factor"].to_numpy()
+            * (
+                1.0
+                - float(asset["terrain_modifier_parameters"]["roughness_penalty"])
+                * terrain_by_cell["terrain_roughness_score"].to_numpy()
+            ),
+            0.05 if response_mode else 0.0,
+            None if response_mode else 1.5,
+        )
+        return factor, "drone_proxy_euclidean"
+
+    raise ValueError(f"unsupported terrain_modifier_profile for {asset_type}: {profile}")
+
+
 def bounded_fire_delay_penalty(
     response_time_min: float | np.ndarray,
     tau_fire_min: float,
@@ -252,36 +306,14 @@ def build_coverage_matrix(
         coverage_radius = float(asset["coverage_radius_m"])
         attenuation = np.clip(1.0 - distance_matrix / max(coverage_radius, 1.0), 0.0, 1.0)
 
-        if asset_type == "person":
-            terrain_factor = np.clip(
-                float(asset["terrain_modifier_parameters"]["base_factor"])
-                * terrain_by_cell["foot_speed_factor"].to_numpy()
-                * (1.0 - float(asset["terrain_modifier_parameters"]["operability_penalty"]) * human_penalty_norm),
-                0.0,
-                1.5,
-            )
-            score_matrix = attenuation * terrain_factor[None, :]
-            coverable_matrix = site_supported & (distance_matrix <= coverage_radius) & (score_matrix > 0)
-            protection_gain = np.zeros_like(score_matrix)
-        elif asset_type == "car":
-            terrain_factor = np.clip(
-                float(asset["terrain_modifier_parameters"]["base_factor"])
-                * terrain_by_cell["car_speed_factor"].to_numpy()
-                * (1.0 - float(asset["terrain_modifier_parameters"]["operability_penalty"]) * human_penalty_norm)
-                * (1.0 - 0.35 * road_distance_norm),
-                0.0,
-                1.5,
-            )
-            score_matrix = attenuation * terrain_factor[None, :]
-            coverable_matrix = site_supported & (distance_matrix <= coverage_radius) & (score_matrix > 0)
-            protection_gain = np.zeros_like(score_matrix)
-        elif asset_type == "drone":
-            terrain_factor = np.clip(
-                float(asset["terrain_modifier_parameters"]["base_factor"])
-                * terrain_by_cell["drone_speed_factor"].to_numpy()
-                * (1.0 - float(asset["terrain_modifier_parameters"]["roughness_penalty"]) * terrain_by_cell["terrain_roughness_score"].to_numpy()),
-                0.0,
-                1.5,
+        if asset_type in {"person", "car", "drone"}:
+            terrain_factor, _ = mobile_terrain_factor(
+                asset_type,
+                asset,
+                terrain_by_cell,
+                human_penalty_norm,
+                road_distance_norm,
+                response_mode=False,
             )
             score_matrix = attenuation * terrain_factor[None, :]
             coverable_matrix = site_supported & (distance_matrix <= coverage_radius) & (score_matrix > 0)
@@ -358,35 +390,15 @@ def build_response_time_matrix(
         asset = asset_types[asset_type]
         support_column = support_column_for_asset(asset_type)
         site_supported = site_metric[support_column].to_numpy(dtype=bool)[:, None]
-        if asset_type == "person":
-            speed_factor = np.clip(
-                float(asset["terrain_modifier_parameters"]["base_factor"])
-                * terrain_by_cell["foot_speed_factor"].to_numpy()
-                * (1.0 - float(asset["terrain_modifier_parameters"]["operability_penalty"]) * human_penalty_norm),
-                0.05,
-                None,
-            )
-            travel_mode = "foot_proxy"
-        elif asset_type == "car":
-            speed_factor = np.clip(
-                float(asset["terrain_modifier_parameters"]["base_factor"])
-                * terrain_by_cell["car_speed_factor"].to_numpy()
-                * (1.0 - float(asset["terrain_modifier_parameters"]["operability_penalty"]) * human_penalty_norm)
-                * (1.0 - 0.35 * road_distance_norm)
-                * (1.0 - 0.20 * site_road_norm[:, None]),
-                0.05,
-                None,
-            )
-            travel_mode = "car_proxy_euclidean"
-        else:
-            speed_factor = np.clip(
-                float(asset["terrain_modifier_parameters"]["base_factor"])
-                * terrain_by_cell["drone_speed_factor"].to_numpy()
-                * (1.0 - float(asset["terrain_modifier_parameters"]["roughness_penalty"]) * terrain_roughness),
-                0.05,
-                None,
-            )
-            travel_mode = "drone_proxy_euclidean"
+        speed_factor, travel_mode = mobile_terrain_factor(
+            asset_type,
+            asset,
+            terrain_by_cell,
+            human_penalty_norm,
+            road_distance_norm,
+            response_mode=True,
+            site_road_norm=site_road_norm,
+        )
 
         effective_speed_kmh = float(asset["response_speed_kmh"]) * speed_factor
         response_time_min = np.where(

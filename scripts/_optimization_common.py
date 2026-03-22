@@ -41,9 +41,13 @@ REQUIRED_AVAILABILITY_KEYS = [
     "scenario_id",
     "budget_total",
     "max_people",
+    "included_people",
     "max_cars",
+    "included_cars",
     "max_drones",
+    "included_drones",
     "max_cameras",
+    "included_cameras",
     "tau_fire_min",
     "beta_fire",
     "lambda_fire",
@@ -215,8 +219,25 @@ def validate_daily_availability(config: dict[str, Any]) -> dict[str, dict[str, A
         if scenario_id in availability_by_scenario:
             raise ValueError(f"duplicate daily availability scenario_id: {scenario_id}")
         require_numeric(mapping["budget_total"], f"{scenario_id}.budget_total")
-        for cap_key in ["max_people", "max_cars", "max_drones", "max_cameras"]:
+        for cap_key in [
+            "max_people",
+            "included_people",
+            "max_cars",
+            "included_cars",
+            "max_drones",
+            "included_drones",
+            "max_cameras",
+            "included_cameras",
+        ]:
             require_numeric(mapping[cap_key], f"{scenario_id}.{cap_key}")
+        if float(mapping["included_people"]) > float(mapping["max_people"]):
+            raise ValueError(f"{scenario_id}.included_people must be <= max_people")
+        if float(mapping["included_cars"]) > float(mapping["max_cars"]):
+            raise ValueError(f"{scenario_id}.included_cars must be <= max_cars")
+        if float(mapping["included_drones"]) > float(mapping["max_drones"]):
+            raise ValueError(f"{scenario_id}.included_drones must be <= max_drones")
+        if float(mapping["included_cameras"]) > float(mapping["max_cameras"]):
+            raise ValueError(f"{scenario_id}.included_cameras must be <= max_cameras")
         require_numeric(mapping["tau_fire_min"], f"{scenario_id}.tau_fire_min")
         require_numeric(mapping["beta_fire"], f"{scenario_id}.beta_fire")
         require_numeric(mapping["lambda_fire"], f"{scenario_id}.lambda_fire")

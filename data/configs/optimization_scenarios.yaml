@@ -3,7 +3,6 @@ scenarios:
     description: placeholder optimization scenario for phase 1 schema validation
     active_asset_types:
       - person
-      - car
       - drone
       - camera
     alpha_values:
