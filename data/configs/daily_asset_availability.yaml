@@ -1,6 +1,7 @@
+# budget_total is annualized USD on the same basis as asset unit_cost
 scenarios:
   - scenario_id: etosha_placeholder_baseline
-    budget_total: 12000.0
+    budget_total: 2542700.0
     max_people: 0
     included_people: 0
     max_cars: 100

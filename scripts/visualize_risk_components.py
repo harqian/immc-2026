@@ -37,6 +37,25 @@ RISK_HEATMAP_WEIGHTS = {
     "wildfire": 1.5,
     "tourism": 0.5,
 }
+POACHING_WEIGHTS = {
+    "poaching_gate_access": 0.24,
+    "poaching_boundary_access": 0.24,
+    "poaching_road_access": 0.18,
+    "poaching_tourist_road_access": 0.08,
+    "poaching_surveillance_gap": 0.08,
+    "poaching_rhino_value": 0.18,
+}
+TOURISM_PRESSURE_WEIGHTS = {
+    "tourism_tourist_road_access": 0.35,
+    "tourism_camp_access": 0.25,
+    "tourism_gate_access": 0.15,
+    "tourism_waterhole_access": 0.25,
+}
+TOURISM_WILDLIFE_WEIGHTS = {
+    "elephant_density_norm": 0.45,
+    "lion_support_norm": 0.25,
+    "herbivore_support_norm": 0.30,
+}
 
 
 def load_inputs() -> dict[str, gpd.GeoDataFrame]:
@@ -118,6 +137,19 @@ def load_inputs() -> dict[str, gpd.GeoDataFrame]:
 def style_axes(ax: plt.Axes) -> None:
     ax.set_axis_off()
     ax.set_aspect("equal")
+
+
+def format_panel_title(title: str, weight: float | None = None, note: str | None = None) -> str:
+    parts = [title]
+    if weight is not None:
+        parts.append(f"weight={weight:.2f}")
+    if note is not None:
+        parts.append(note)
+    return "\n".join(parts)
+
+
+def format_weight_expression(weights: dict[str, float], labels: dict[str, str]) -> str:
+    return " + ".join(f"{weight:.2f}*{labels[key]}" for key, weight in weights.items())
 
 
 def add_reference_layers(
@@ -272,20 +304,32 @@ def render_poaching_components(inputs: dict[str, gpd.GeoDataFrame], diagnostics:
 
     fig, axes = plt.subplots(3, 3, figsize=(17, 14))
     panels = [
-        ("poaching_gate_access", "gate access"),
-        ("poaching_boundary_access", "boundary access"),
-        ("poaching_road_access", "road access"),
-        ("poaching_tourist_road_access", "tourist-road access"),
-        ("poaching_surveillance_gap", "surveillance gap"),
-        ("poaching_rhino_value", "rhino value"),
-        ("poaching_weighted_sum", "weighted poaching score"),
-        ("poaching_threat_norm", "poaching threat"),
-        ("poaching_risk_norm", "poaching risk"),
+        ("poaching_gate_access", format_panel_title("gate access", POACHING_WEIGHTS["poaching_gate_access"])),
+        (
+            "poaching_boundary_access",
+            format_panel_title("boundary access", POACHING_WEIGHTS["poaching_boundary_access"]),
+        ),
+        ("poaching_road_access", format_panel_title("road access", POACHING_WEIGHTS["poaching_road_access"])),
+        (
+            "poaching_tourist_road_access",
+            format_panel_title("tourist-road access", POACHING_WEIGHTS["poaching_tourist_road_access"]),
+        ),
+        (
+            "poaching_surveillance_gap",
+            format_panel_title("surveillance gap", POACHING_WEIGHTS["poaching_surveillance_gap"]),
+        ),
+        ("poaching_rhino_value", format_panel_title("rhino value", POACHING_WEIGHTS["poaching_rhino_value"])),
+        ("poaching_weighted_sum", format_panel_title("weighted poaching score", note="weighted sum of components")),
+        ("poaching_threat_norm", format_panel_title("poaching threat", note="final threat surface")),
+        ("poaching_risk_norm", format_panel_title("poaching risk", note="species x threat")),
     ]
     for ax, (column, title) in zip(axes.ravel(), panels):
         plot_surface(ax, diagnostics, column, title, boundary, pan, roads)
 
-    fig.suptitle("poaching threat assembly", fontsize=14)
+    fig.suptitle(
+        "poaching threat assembly\n0.24*gate + 0.24*boundary + 0.18*road + 0.08*tourist road + 0.08*surveillance gap + 0.18*rhino",
+        fontsize=14,
+    )
     fig.tight_layout()
     fig.savefig(POACHING_COMPONENTS_PATH, dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -298,17 +342,20 @@ def render_wildfire_components(inputs: dict[str, gpd.GeoDataFrame], diagnostics:
 
     fig, axes = plt.subplots(2, 3, figsize=(16, 10.5))
     panels = [
-        ("wildfire_recent_fire_suppression", "recent-fire suppression"),
-        ("wildfire_flammable_land", "flammable land"),
-        ("wildfire_water_remoteness", "water remoteness"),
-        ("wildfire_base_exposure", "base wildfire exposure"),
-        ("wildfire_threat_norm", "wildfire threat"),
-        ("wildfire_risk_norm", "wildfire risk"),
+        ("wildfire_recent_fire_suppression", format_panel_title("recent-fire suppression", note="multiplier")),
+        ("wildfire_flammable_land", format_panel_title("flammable land", 0.60)),
+        ("wildfire_water_remoteness", format_panel_title("water remoteness", 0.40)),
+        ("wildfire_base_exposure", format_panel_title("base wildfire exposure", note="0.60*flammable + 0.40*water")),
+        ("wildfire_threat_norm", format_panel_title("wildfire threat", note="base x suppression")),
+        ("wildfire_risk_norm", format_panel_title("wildfire risk", note="species x threat")),
     ]
     for ax, (column, title) in zip(axes.ravel(), panels):
         plot_surface(ax, diagnostics, column, title, boundary, pan, roads)
 
-    fig.suptitle("wildfire threat assembly", fontsize=14)
+    fig.suptitle(
+        "wildfire threat assembly\n(0.60*flammable land + 0.40*water remoteness) x recent-fire suppression",
+        fontsize=14,
+    )
     fig.tight_layout()
     fig.savefig(WILDFIRE_COMPONENTS_PATH, dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -321,19 +368,49 @@ def render_tourism_components(inputs: dict[str, gpd.GeoDataFrame], diagnostics: 
 
     fig, axes = plt.subplots(2, 4, figsize=(20, 10.5))
     panels = [
-        ("tourism_tourist_road_access", "tourist-road access"),
-        ("tourism_camp_access", "camp access"),
-        ("tourism_gate_access", "gate access"),
-        ("tourism_waterhole_access", "waterhole access"),
-        ("tourism_pressure_norm", "tourism pressure"),
-        ("tourism_wildlife_presence", "wildlife presence"),
-        ("tourism_threat_norm", "tourism interaction"),
-        ("tourism_risk_norm", "tourism risk"),
+        (
+            "tourism_tourist_road_access",
+            format_panel_title("tourist-road access", TOURISM_PRESSURE_WEIGHTS["tourism_tourist_road_access"]),
+        ),
+        ("tourism_camp_access", format_panel_title("camp access", TOURISM_PRESSURE_WEIGHTS["tourism_camp_access"])),
+        ("tourism_gate_access", format_panel_title("gate access", TOURISM_PRESSURE_WEIGHTS["tourism_gate_access"])),
+        (
+            "tourism_waterhole_access",
+            format_panel_title("waterhole access", TOURISM_PRESSURE_WEIGHTS["tourism_waterhole_access"]),
+        ),
+        ("tourism_pressure_norm", format_panel_title("tourism pressure", note="weighted sum of access terms")),
+        (
+            "tourism_wildlife_presence",
+            format_panel_title(
+                "wildlife presence",
+                note=format_weight_expression(
+                    TOURISM_WILDLIFE_WEIGHTS,
+                    {
+                        "elephant_density_norm": "elephant",
+                        "lion_support_norm": "lion",
+                        "herbivore_support_norm": "herbivore",
+                    },
+                ),
+            ),
+        ),
+        ("tourism_threat_norm", format_panel_title("tourism interaction", note="pressure x wildlife presence")),
+        ("tourism_risk_norm", format_panel_title("tourism risk", note="species x pressure")),
     ]
     for ax, (column, title) in zip(axes.ravel(), panels):
         plot_surface(ax, diagnostics, column, title, boundary, pan, roads)
 
-    fig.suptitle("tourism threat assembly", fontsize=14)
+    fig.suptitle(
+        "tourism threat assembly\npressure = 0.35*tourist road + 0.25*camp + 0.15*gate + 0.25*waterhole; wildlife = "
+        + format_weight_expression(
+            TOURISM_WILDLIFE_WEIGHTS,
+            {
+                "elephant_density_norm": "elephant",
+                "lion_support_norm": "lion",
+                "herbivore_support_norm": "herbivore",
+            },
+        ),
+        fontsize=14,
+    )
     fig.tight_layout()
     fig.savefig(TOURISM_COMPONENTS_PATH, dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -346,15 +423,18 @@ def render_risk_assembly(inputs: dict[str, gpd.GeoDataFrame], diagnostics: gpd.G
 
     fig, axes = plt.subplots(2, 2, figsize=(14, 11))
     panels = [
-        ("poaching_risk_norm", "poaching risk"),
-        ("wildfire_risk_norm", "wildfire risk"),
-        ("tourism_risk_norm", "tourism risk"),
-        ("composite_risk_norm", "composite risk"),
+        ("poaching_risk_norm", format_panel_title("poaching risk", RISK_HEATMAP_WEIGHTS["poaching"])),
+        ("wildfire_risk_norm", format_panel_title("wildfire risk", RISK_HEATMAP_WEIGHTS["wildfire"])),
+        ("tourism_risk_norm", format_panel_title("tourism risk", RISK_HEATMAP_WEIGHTS["tourism"])),
+        ("composite_risk_norm", format_panel_title("composite risk", note="weighted mean")),
     ]
     for ax, (column, title) in zip(axes.ravel(), panels):
         plot_surface(ax, diagnostics, column, title, boundary, pan, roads)
 
-    fig.suptitle("risk assembly from threat-specific surfaces to final heatmap", fontsize=14)
+    fig.suptitle(
+        "risk assembly from threat-specific surfaces to final heatmap\ncomposite = weighted mean(1.0*poaching risk, 1.5*wildfire risk, 0.5*tourism risk)",
+        fontsize=14,
+    )
     fig.tight_layout()
     fig.savefig(RISK_ASSEMBLY_PATH, dpi=180, bbox_inches="tight")
     plt.close(fig)

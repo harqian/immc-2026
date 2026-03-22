@@ -12,7 +12,7 @@ it first finds the maximum achievable protection score, then solves a response-m
 - scenario description: `placeholder optimization scenario for phase 1 schema validation`
 - active asset types: `car, drone, camera`
 - alpha values: `1.00, 0.95, 0.90`
-- solve-time budget from artifact: `12000`
+- solve-time budget from artifact: `2542700`
 - recommended alpha: `0.95`
 
 ![model structure](01_model_structure.png)
@@ -31,10 +31,10 @@ the model works over several linked object sets:
 for the current artifact:
 
 - cells in optimization output: `1007`
-- selected sites in chosen solution artifact: `89`
-- covered cells: `295`
-- uncovered cells: `712`
-- responder assignment counts: `car=727, drone=276, dummy 225 min fallback=4`
+- selected sites in chosen solution artifact: `103`
+- covered cells: `299`
+- uncovered cells: `708`
+- responder assignment counts: `car=744, drone=255, dummy 225 min fallback=8`
 
 ## decision variables and what they mean
 
@@ -99,21 +99,21 @@ the frontier algorithm is:
 
 | alpha | coverage_target | achieved_protection | response_objective | budget_used | selected_site_count | selected_people | selected_cars | selected_drones | selected_cameras | selected_interventions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.000 | 152.858 | 152.868 | 10861.151 | 11950.000 | 63.000 | 0.000 | 60.000 | 3.000 | 15.000 | 1.000 |
-| 0.950 | 145.215 | 146.625 | 8637.438 | 12000.000 | 89.000 | 0.000 | 86.000 | 3.000 | 0.000 | 0.000 |
-| 0.900 | 137.573 | 141.460 | 8664.587 | 11925.000 | 88.000 | 0.000 | 86.000 | 3.000 | 0.000 | 0.000 |
+| 1.000 | 162.554 | 162.554 | 15710.593 | 49415.000 | 103.000 | 0.000 | 100.000 | 3.000 | 20.000 | 12.000 |
+| 0.950 | 154.426 | 154.759 | 10234.513 | 26915.000 | 103.000 | 0.000 | 100.000 | 3.000 | 20.000 | 3.000 |
+| 0.900 | 146.299 | 146.346 | 8595.114 | 19415.000 | 103.000 | 0.000 | 100.000 | 3.000 | 20.000 | 0.000 |
 
 the chosen artifact is the `alpha=0.95` point:
 
-- achieved protection: `146.625`
-- response objective: `8637.438`
-- budget used: `12000.0`
-- selected sites: `89`
+- achieved protection: `154.759`
+- response objective: `10234.513`
+- budget used: `26915.0`
+- selected sites: `103`
 - selected people: `0`
-- selected cars: `86`
+- selected cars: `100`
 - selected drones: `3`
-- selected cameras: `0`
-- selected interventions: `0`
+- selected cameras: `20`
+- selected interventions: `3`
 
 ## resource interpretation
 
@@ -122,10 +122,10 @@ if the current config is different, that difference is shown explicitly so you c
 
 | asset_type | selected_units | solve_time_cap | current_config_cap | current_included_baseline | unit_cost |
 | --- | --- | --- | --- | --- | --- |
-| people | 0 | 0 | 0 | 0 | 570.000 |
-| cars | 86 | 100 | 100 | 100 | 450.000 |
-| drones | 3 | 3 | 3 | 0 | 800.000 |
-| cameras | 0 | 20 | 20 | 0 | 90.000 |
+| people | 0 | 0 | 0 | 0 | 22470.000 |
+| cars | 100 | 100 | 100 | 100 | 7810.000 |
+| drones | 3 | 3 | 3 | 0 | 1580.000 |
+| cameras | 20 | 20 | 20 | 0 | 160.000 |
 
 notes:
 
@@ -160,18 +160,18 @@ the cell diagnostics highlight how the objective is assembled:
 artifact summary statistics:
 
 - response time min / p25 / median / p75 / max:
-  - `0.50` / `15.91` / `31.08` / `69.31` / `225.00`
+  - `0.50` / `15.99` / `32.38` / `75.12` / `225.00`
 - mean incremental protection gain:
-  - `0.0000`
+  - `0.0054`
 - max incremental protection gain:
-  - `0.0000`
+  - `0.2052`
 
 ![cell metrics](05_cell_metrics.png)
 
 ## what this walkthrough says about the current solve
 
 - the artifact is clearly a frontier solve, not a single-objective solve: response gets much better when alpha drops from `1.00` to `0.95`, while protection only drops slightly.
-- the chosen artifact is driven by `86 cars, and 3 drones`, with `4` cells still falling back to the dummy response.
+- the chosen artifact is driven by `100 cars, 3 drones, and 20 cameras`, with `8` cells still falling back to the dummy response.
 - because the current config and current output artifact disagree on some caps, this walkthrough should be read as an explanation of the saved artifact, not as proof that the current config would reproduce the same answer.
 
 ## how to regenerate

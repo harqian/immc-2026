@@ -1,6 +1,7 @@
+# unit_cost values are annualized USD per asset-year
 asset_types:
   - asset_type: person
-    unit_cost: 570.0
+    unit_cost: 22470.0
     coverage_radius_m: 7000.0
     response_speed_kmh: 28.0
     site_eligibility:
@@ -19,7 +20,7 @@ asset_types:
     camera_bundle_size: 0
     risk_suppression_factor: 0.0
   - asset_type: car
-    unit_cost: 450.0
+    unit_cost: 7810.0
     coverage_radius_m: 7000.0
     response_speed_kmh: 28.0
     site_eligibility:
@@ -38,7 +39,7 @@ asset_types:
     camera_bundle_size: 0
     risk_suppression_factor: 0.0
   - asset_type: drone
-    unit_cost: 800.0
+    unit_cost: 1580.0
     coverage_radius_m: 12000.0
     response_speed_kmh: 55.0
     site_eligibility:
@@ -57,7 +58,7 @@ asset_types:
     camera_bundle_size: 0
     risk_suppression_factor: 0.0
   - asset_type: camera
-    unit_cost: 90.0
+    unit_cost: 160.0
     coverage_radius_m: 75.0
     response_speed_kmh: 0.0
     site_eligibility:
