@@ -21,38 +21,28 @@ WATERHOLES_PATH = PROCESSED_DIR / "waterholes.geojson"
 PAN_PATH = PROCESSED_DIR / "pan_polygon.geojson"
 WILDFIRES_PATH = PROCESSED_DIR / "wildfire_history.geojson"
 METRIC_CRS = "EPSG:32733"
+GRID_SCHEMA_COLUMNS = [
+    "cell_id",
+    "metric_crs",
+    "grid_version",
+    "cell_target_area_m2",
+    "hex_side_length_m",
+    "cell_area_m2",
+    "centroid_x_m",
+    "centroid_y_m",
+]
 
 
 def load_inputs() -> dict[str, gpd.GeoDataFrame]:
     return {
         "grid": validate_geojson(
             GRID_PATH,
-            [
-                "cell_id",
-                "grid_size_m",
-                "metric_crs",
-                "grid_version",
-                "cell_area_m2",
-                "centroid_x_m",
-                "centroid_y_m",
-                "row_index",
-                "col_index",
-            ],
+            GRID_SCHEMA_COLUMNS,
             "analysis grid",
         ),
         "centroids": validate_geojson(
             GRID_CENTROIDS_PATH,
-            [
-                "cell_id",
-                "grid_size_m",
-                "metric_crs",
-                "grid_version",
-                "cell_area_m2",
-                "centroid_x_m",
-                "centroid_y_m",
-                "row_index",
-                "col_index",
-            ],
+            GRID_SCHEMA_COLUMNS,
             "grid centroids",
         ),
         "boundary": validate_geojson(BOUNDARY_PATH, ["name", "source", "source_detail"], "processed boundary"),
@@ -112,20 +102,7 @@ def build_features(inputs: dict[str, gpd.GeoDataFrame]) -> gpd.GeoDataFrame:
     pan_metric = inputs["pan"].to_crs(METRIC_CRS)
     wildfires_metric = inputs["wildfires"].to_crs(METRIC_CRS)
 
-    features = grid_metric[
-        [
-            "cell_id",
-            "grid_size_m",
-            "metric_crs",
-            "grid_version",
-            "cell_area_m2",
-            "centroid_x_m",
-            "centroid_y_m",
-            "row_index",
-            "col_index",
-            "geometry",
-        ]
-    ].copy()
+    features = grid_metric[GRID_SCHEMA_COLUMNS + ["geometry"]].copy()
 
     boundary_edge = gpd.GeoDataFrame(geometry=[boundary_metric.geometry.iloc[0].boundary], crs=METRIC_CRS)
     features["dist_to_boundary_m"] = min_distance(centroids_metric, boundary_edge)
@@ -177,14 +154,13 @@ def check_outputs() -> None:
         FEATURES_PATH,
         [
             "cell_id",
-            "grid_size_m",
             "metric_crs",
             "grid_version",
+            "cell_target_area_m2",
+            "hex_side_length_m",
             "cell_area_m2",
             "centroid_x_m",
             "centroid_y_m",
-            "row_index",
-            "col_index",
             "dist_to_boundary_m",
             "dist_to_fence_proxy_m",
             "dist_to_road_m",

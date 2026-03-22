@@ -202,11 +202,11 @@ expected new retained columns if added in phase 1:
 ### Success Criteria
 
 #### Automated Verification
-- [ ] `act && python3 scripts/07_build_features.py`
-- [ ] `act && python3 scripts/08_build_species_layers.py`
-- [ ] `act && python3 scripts/09_build_threat_layers.py`
-- [ ] `act && python3 scripts/10_build_risk_tensor.py`
-- [ ] `act && python3 scripts/12_validate_outputs.py`
+- [x] `act && python3 scripts/07_build_features.py`
+- [x] `act && python3 scripts/08_build_species_layers.py`
+- [x] `act && python3 scripts/09_build_threat_layers.py`
+- [x] `act && python3 scripts/10_build_risk_tensor.py`
+- [x] `act && python3 scripts/12_validate_outputs.py`
 
 #### Manual Verification
 - [ ] inspect [`outputs/composite_risk.geojson`](/Users/hq/code/immc-risk-intervention/outputs/composite_risk.geojson) and confirm risk polygons are hex-shaped

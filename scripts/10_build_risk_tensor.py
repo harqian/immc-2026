@@ -22,22 +22,22 @@ RISK_HEATMAP_WEIGHTS = {
     "wildfire": 1.5,
     "tourism": 0.5,
 }
+GRID_SCHEMA_COLUMNS = [
+    "cell_id",
+    "metric_crs",
+    "grid_version",
+    "cell_target_area_m2",
+    "hex_side_length_m",
+    "cell_area_m2",
+    "centroid_x_m",
+    "centroid_y_m",
+]
 
 
 def load_inputs() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoDataFrame]:
     grid = validate_geojson(
         GRID_PATH,
-        [
-            "cell_id",
-            "grid_size_m",
-            "metric_crs",
-            "grid_version",
-            "cell_area_m2",
-            "centroid_x_m",
-            "centroid_y_m",
-            "row_index",
-            "col_index",
-        ],
+        GRID_SCHEMA_COLUMNS,
         "analysis grid",
     )
     species = validate_parquet(
@@ -135,12 +135,13 @@ def write_tensor(tensor: np.ndarray, merged: gpd.GeoDataFrame) -> None:
     composite = merged[
         [
             "cell_id",
-            "grid_size_m",
             "metric_crs",
             "grid_version",
+            "cell_target_area_m2",
+            "hex_side_length_m",
             "cell_area_m2",
-            "row_index",
-            "col_index",
+            "centroid_x_m",
+            "centroid_y_m",
             "elephant_density_norm",
             "rhino_support_norm",
             "lion_support_norm",
@@ -172,6 +173,11 @@ def check_outputs() -> None:
         COMPOSITE_PATH,
         [
             "cell_id",
+            "metric_crs",
+            "grid_version",
+            "cell_target_area_m2",
+            "hex_side_length_m",
+            "cell_area_m2",
             "elephant_density_norm",
             "rhino_support_norm",
             "lion_support_norm",

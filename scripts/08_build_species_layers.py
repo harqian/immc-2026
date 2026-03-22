@@ -18,53 +18,46 @@ LIONS_PATH = PROCESSED_DIR / "lion_zones.geojson"
 RHINOS_PATH = PROCESSED_DIR / "rhino_reference_areas.geojson"
 WATERHOLES_PATH = PROCESSED_DIR / "waterholes.geojson"
 METRIC_CRS = "EPSG:32733"
+GRID_SCHEMA_COLUMNS = [
+    "cell_id",
+    "metric_crs",
+    "grid_version",
+    "cell_target_area_m2",
+    "hex_side_length_m",
+    "cell_area_m2",
+    "centroid_x_m",
+    "centroid_y_m",
+]
+FEATURE_SCHEMA_COLUMNS = [
+    *GRID_SCHEMA_COLUMNS,
+    "dist_to_boundary_m",
+    "dist_to_fence_proxy_m",
+    "dist_to_road_m",
+    "dist_to_tourist_road_m",
+    "dist_to_gate_m",
+    "dist_to_camp_m",
+    "dist_to_waterhole_m",
+    "dist_to_pan_m",
+    "pan_overlap_m2",
+    "pan_overlap_ratio",
+    "historical_fire_event_count",
+    "terrain_class",
+    "centroid_lon",
+    "centroid_lat",
+    "geometry",
+]
 
 
 def load_inputs() -> dict[str, gpd.GeoDataFrame]:
     return {
         "grid": validate_geojson(
             GRID_PATH,
-            [
-                "cell_id",
-                "grid_size_m",
-                "metric_crs",
-                "grid_version",
-                "cell_area_m2",
-                "centroid_x_m",
-                "centroid_y_m",
-                "row_index",
-                "col_index",
-            ],
+            GRID_SCHEMA_COLUMNS,
             "analysis grid",
         ),
         "features": validate_parquet(
             FEATURES_PATH,
-            [
-                "cell_id",
-                "grid_size_m",
-                "metric_crs",
-                "grid_version",
-                "cell_area_m2",
-                "centroid_x_m",
-                "centroid_y_m",
-                "row_index",
-                "col_index",
-                "dist_to_boundary_m",
-                "dist_to_fence_proxy_m",
-                "dist_to_road_m",
-                "dist_to_tourist_road_m",
-                "dist_to_gate_m",
-                "dist_to_camp_m",
-                "dist_to_waterhole_m",
-                "dist_to_pan_m",
-                "pan_overlap_m2",
-                "pan_overlap_ratio",
-                "historical_fire_event_count",
-                "terrain_class",
-                "centroid_lon",
-                "centroid_lat",
-                "geometry",
-            ],
+            FEATURE_SCHEMA_COLUMNS,
             "grid features",
         ),
         "elephants": validate_parquet(
@@ -147,17 +140,7 @@ def build_species_layers(inputs: dict[str, gpd.GeoDataFrame]) -> gpd.GeoDataFram
 
     species = grid.merge(
         features.drop(columns="geometry"),
-        on=[
-            "cell_id",
-            "grid_size_m",
-            "metric_crs",
-            "grid_version",
-            "cell_area_m2",
-            "centroid_x_m",
-            "centroid_y_m",
-            "row_index",
-            "col_index",
-        ],
+        on=GRID_SCHEMA_COLUMNS,
         how="inner",
     )
     species_metric = species.to_crs(METRIC_CRS)
@@ -190,14 +173,13 @@ def check_outputs() -> None:
         SPECIES_OUTPUT_PATH,
         [
             "cell_id",
-            "grid_size_m",
             "metric_crs",
             "grid_version",
+            "cell_target_area_m2",
+            "hex_side_length_m",
             "cell_area_m2",
             "centroid_x_m",
             "centroid_y_m",
-            "row_index",
-            "col_index",
             "dist_to_boundary_m",
             "dist_to_fence_proxy_m",
             "dist_to_road_m",

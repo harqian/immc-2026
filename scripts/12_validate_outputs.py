@@ -41,7 +41,16 @@ def main() -> int:
 
     grid = validate_geojson(
         GRID_PATH,
-        ["cell_id", "grid_size_m", "metric_crs", "grid_version", "cell_area_m2", "row_index", "col_index"],
+        [
+            "cell_id",
+            "metric_crs",
+            "grid_version",
+            "cell_target_area_m2",
+            "hex_side_length_m",
+            "cell_area_m2",
+            "centroid_x_m",
+            "centroid_y_m",
+        ],
         "analysis grid",
     )
     species = validate_parquet(
