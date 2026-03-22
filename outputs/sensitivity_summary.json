@@ -1,0 +1,70 @@
+{
+  "scenario_id": "etosha_placeholder_baseline",
+  "baseline": {
+    "scenario_id": "etosha_placeholder_baseline",
+    "alpha": 0.95,
+    "coverage_target": 150.14611665613836,
+    "achieved_protection": 150.1510173453922,
+    "response_objective": 8960.89016455898,
+    "budget_used": 12000.0,
+    "tourism_penalty_used": 0.0,
+    "selected_site_count": 90,
+    "selected_people": 87,
+    "selected_cars": 0,
+    "selected_drones": 3,
+    "selected_cameras": 0,
+    "locked_down_waterholes": 0,
+    "selected_interventions": 0,
+    "mean_response_time_min": 53.35320375567758,
+    "p90_response_time_min": 137.4189543929757,
+    "covered_cell_share": 0.28614157527417744,
+    "mean_fire_delay_penalty": 26.256682367291507,
+    "selected_high_risk_sites": 47,
+    "status": "baseline",
+    "parameter_name": "baseline",
+    "parameter_label": "baseline",
+    "parameter_category": "baseline",
+    "multiplier": 1.0,
+    "coverage_max": 158.0485438485667,
+    "recommended_alpha": 0.95
+  },
+  "top_parameters": [
+    {
+      "parameter_name": "beta_fire",
+      "parameter_label": "fire penalty slope beta",
+      "importance_score": 6.3215356028882
+    },
+    {
+      "parameter_name": "max_drones",
+      "parameter_label": "drone cap",
+      "importance_score": 0.21004041939736667
+    },
+    {
+      "parameter_name": "budget_total",
+      "parameter_label": "budget total",
+      "importance_score": 0.20684905035962592
+    },
+    {
+      "parameter_name": "max_people",
+      "parameter_label": "people cap",
+      "importance_score": 0.1231162124160345
+    },
+    {
+      "parameter_name": "protection_leverage_scale",
+      "parameter_label": "protection leverage scale",
+      "importance_score": 0.0943860270328463
+    }
+  ],
+  "screening_multipliers": [
+    0.5,
+    2.0
+  ],
+  "full_multipliers": [
+    0.5,
+    0.75,
+    1.3333333333333333,
+    2.0
+  ],
+  "successful_result_count": 20,
+  "error_result_count": 0
+}

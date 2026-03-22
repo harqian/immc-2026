@@ -93,64 +93,19 @@ class FrontierSolveTimeoutError(RuntimeError):
     pass
 
 
-def load_optimization_inputs(scenario_id: str) -> OptimizationData:
-    bundle = validate_config_bundle()
-    validate_phase1_input_contract(bundle, scenario_id)
-    scenario = bundle.scenarios_by_id[scenario_id]
-    availability = bundle.availability_by_scenario[scenario_id]
-    asset_types = {str(asset["asset_type"]): asset for asset in bundle.asset_types}
-
-    selected_sites = select_sites_for_optimization(
-        validate_geojson(
-            CANDIDATE_SITES_PATH,
-            [
-                "site_id",
-                "scenario_id",
-                "site_kind",
-                "candidate_rank",
-                "supports_people",
-                "supports_cars",
-                "supports_drones",
-                "supports_cameras",
-                "base_cost_fixed",
-                "waterhole_influence_radius_m",
-            ],
-            "surveillance candidate sites",
-        ),
-        scenario,
-        scenario_id,
-    )
-    terrain = validate_parquet(
-        TERRAIN_COSTS_PATH,
-        [
-            "cell_id",
-            "protection_benefit",
-            "human_operability_penalty",
-            "wildfire_risk_norm",
-            "geometry",
-        ],
-        "terrain cost surface",
-    )
-    composite = validate_geojson(
-        COMPOSITE_RISK_PATH,
-        ["cell_id", "composite_risk_norm", "wildfire_risk_norm"],
-        "composite risk layer",
-    )
-    interventions = validate_geojson(
-        WATERHOLE_INTERVENTIONS_PATH,
-        [
-            "intervention_site_id",
-            "capital_cost",
-            "tourism_cost",
-            "protection_benefit_gain",
-            "influence_radius_m",
-        ],
-        "waterhole interventions",
-    )
-    coverage = pd.read_parquet(COVERAGE_MATRIX_PATH)
-    response = pd.read_parquet(RESPONSE_MATRIX_PATH)
-    fire_breakpoints = pd.read_parquet(FIRE_DELAY_BREAKPOINTS_PATH)
-
+def prepare_optimization_data(
+    scenario_id: str,
+    scenario: dict[str, object],
+    availability: dict[str, object],
+    asset_types: dict[str, dict[str, object]],
+    selected_sites: gpd.GeoDataFrame,
+    terrain: gpd.GeoDataFrame,
+    composite: gpd.GeoDataFrame,
+    interventions: gpd.GeoDataFrame,
+    coverage: pd.DataFrame,
+    response: pd.DataFrame,
+    fire_breakpoints: pd.DataFrame,
+) -> OptimizationData:
     selected_site_ids = set(selected_sites["site_id"])
     active_asset_types = set(str(asset_type) for asset_type in scenario["active_asset_types"])
     coverage = coverage[
@@ -225,6 +180,78 @@ def load_optimization_inputs(scenario_id: str) -> OptimizationData:
         fire_bp_ids=fire_bp_ids,
         fire_bp_time=fire_breakpoints.set_index("breakpoint_index")["response_time_min"].to_dict(),
         fire_bp_penalty=fire_breakpoints.set_index("breakpoint_index")["penalty_value"].to_dict(),
+    )
+
+
+def load_optimization_inputs(scenario_id: str) -> OptimizationData:
+    bundle = validate_config_bundle()
+    validate_phase1_input_contract(bundle, scenario_id)
+    scenario = bundle.scenarios_by_id[scenario_id]
+    availability = bundle.availability_by_scenario[scenario_id]
+    asset_types = {str(asset["asset_type"]): asset for asset in bundle.asset_types}
+
+    selected_sites = select_sites_for_optimization(
+        validate_geojson(
+            CANDIDATE_SITES_PATH,
+            [
+                "site_id",
+                "scenario_id",
+                "site_kind",
+                "candidate_rank",
+                "supports_people",
+                "supports_cars",
+                "supports_drones",
+                "supports_cameras",
+                "base_cost_fixed",
+                "waterhole_influence_radius_m",
+            ],
+            "surveillance candidate sites",
+        ),
+        scenario,
+        scenario_id,
+    )
+    terrain = validate_parquet(
+        TERRAIN_COSTS_PATH,
+        [
+            "cell_id",
+            "protection_benefit",
+            "human_operability_penalty",
+            "wildfire_risk_norm",
+            "geometry",
+        ],
+        "terrain cost surface",
+    )
+    composite = validate_geojson(
+        COMPOSITE_RISK_PATH,
+        ["cell_id", "composite_risk_norm", "wildfire_risk_norm"],
+        "composite risk layer",
+    )
+    interventions = validate_geojson(
+        WATERHOLE_INTERVENTIONS_PATH,
+        [
+            "intervention_site_id",
+            "capital_cost",
+            "tourism_cost",
+            "protection_benefit_gain",
+            "influence_radius_m",
+        ],
+        "waterhole interventions",
+    )
+    coverage = pd.read_parquet(COVERAGE_MATRIX_PATH)
+    response = pd.read_parquet(RESPONSE_MATRIX_PATH)
+    fire_breakpoints = pd.read_parquet(FIRE_DELAY_BREAKPOINTS_PATH)
+    return prepare_optimization_data(
+        scenario_id=scenario_id,
+        scenario=scenario,
+        availability=availability,
+        asset_types=asset_types,
+        selected_sites=selected_sites,
+        terrain=terrain,
+        composite=composite,
+        interventions=interventions,
+        coverage=coverage,
+        response=response,
+        fire_breakpoints=fire_breakpoints,
     )
 
 
