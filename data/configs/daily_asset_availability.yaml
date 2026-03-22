@@ -1,10 +1,10 @@
 scenarios:
   - scenario_id: etosha_placeholder_baseline
     budget_total: 12000.0
-    max_people: 100
-    included_people: 100
-    max_cars: 0
-    included_cars: 0
+    max_people: 0
+    included_people: 0
+    max_cars: 100
+    included_cars: 100
     max_drones: 3
     included_drones: 0
     max_cameras: 20

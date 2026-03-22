@@ -35,8 +35,9 @@ GRID_CENTROIDS_PATH = OUTPUTS_DIR / "grid_centroids.geojson"
 CANDIDATE_SITES_PATH = Path(__file__).resolve().parent.parent / "data/processed/surveillance_candidate_sites.geojson"
 
 SCREENING_MULTIPLIERS = [0.5, 2.0]
-FULL_MULTIPLIERS = [0.5, 0.75, 4.0 / 3.0, 2.0]
-DEFAULT_TOP_N = 5
+FULL_MULTIPLIERS = [0.5, 0.75, 1.0, 4.0 / 3.0, 2.0]
+DEFAULT_TOP_N = 7
+SHOWCASE_EXCLUDED_PARAMETERS = {"budget_total"}
 
 
 @dataclass(frozen=True)
@@ -288,6 +289,8 @@ def identify_top_parameters(screening: pd.DataFrame, baseline: pd.Series, raw: R
     }
     scores = []
     for spec in PARAMETER_SPECS:
+        if spec.name in SHOWCASE_EXCLUDED_PARAMETERS:
+            continue
         scoped = screening[screening["parameter_name"] == spec.name].copy()
         score = score_parameter(scoped, baseline, baseline_caps)
         scores.append({"parameter_name": spec.name, "parameter_label": spec.label, "importance_score": score})
@@ -308,11 +311,11 @@ def add_percent_changes(frame: pd.DataFrame, baseline: pd.Series) -> pd.DataFram
 def render_tornado(results: pd.DataFrame, baseline: pd.Series) -> None:
     success = results[results["status"] == "ok"].copy()
     metrics = [
-        ("achieved_protection_pct_change", "achieved protection change (%)", False),
+        ("achieved_protection_pct_change", "achieved protection change (%)", True),
         ("response_objective_pct_change", "response objective change (%)", True),
     ]
     fig, axes = plt.subplots(1, 2, figsize=(14, 7), sharey=True)
-    multiplier_colors = {0.5: "#c44536", 0.75: "#dd6b4d", 4.0 / 3.0: "#4c956c", 2.0: "#2a6f97"}
+    multiplier_colors = {0.5: "#c44536", 0.75: "#dd6b4d", 1.0: "#444444", 4.0 / 3.0: "#4c956c", 2.0: "#2a6f97"}
 
     for ax, (metric, title, use_symlog) in zip(axes, metrics):
         grouped = success.groupby("parameter_label")[metric].agg(["min", "max"])
@@ -422,10 +425,12 @@ def main() -> int:
         .reset_index(drop=True)
         .sort_values("importance_score", ascending=False)
     )
+    ranking = ranking[~ranking["parameter_name"].isin(SHOWCASE_EXCLUDED_PARAMETERS)].reset_index(drop=True)
     summary = {
         "scenario_id": args.scenario_id,
         "baseline": baseline_row,
         "top_parameters": ranking.head(args.top_n).to_dict(orient="records"),
+        "excluded_from_showcase": sorted(SHOWCASE_EXCLUDED_PARAMETERS),
         "screening_multipliers": SCREENING_MULTIPLIERS,
         "full_multipliers": FULL_MULTIPLIERS,
         "successful_result_count": int((results["status"] == "ok").sum()),
