@@ -3,66 +3,66 @@
   "baseline": {
     "scenario_id": "etosha_placeholder_baseline",
     "alpha": 0.95,
-    "coverage_target": 145.21547916952565,
-    "achieved_protection": 146.6254066455929,
-    "response_objective": 8637.437512040076,
-    "budget_used": 12000.0,
-    "tourism_penalty_used": 0.0,
-    "selected_site_count": 89,
+    "coverage_target": 154.4262724837185,
+    "achieved_protection": 154.75859527976462,
+    "response_objective": 10233.830205052407,
+    "budget_used": 31865.0,
+    "tourism_penalty_used": 1200.0,
+    "selected_site_count": 103,
     "selected_people": 0,
-    "selected_cars": 86,
+    "selected_cars": 100,
     "selected_drones": 3,
-    "selected_cameras": 0,
-    "locked_down_waterholes": 0,
-    "selected_interventions": 0,
-    "mean_response_time_min": 50.57911742767495,
-    "p90_response_time_min": 128.592475819992,
-    "covered_cell_share": 0.2929493545183714,
-    "mean_fire_delay_penalty": 23.422666315277397,
-    "selected_high_risk_sites": 48,
+    "selected_cameras": 20,
+    "locked_down_waterholes": 4,
+    "selected_interventions": 3,
+    "mean_response_time_min": 53.27952219552807,
+    "p90_response_time_min": 138.7365878994856,
+    "covered_cell_share": 0.2969215491559086,
+    "mean_fire_delay_penalty": 26.42516467763525,
+    "selected_high_risk_sites": 58,
     "status": "baseline",
     "parameter_name": "baseline",
     "parameter_label": "baseline",
     "parameter_category": "baseline",
     "multiplier": 1.0,
-    "coverage_max": 152.85839912581648,
+    "coverage_max": 162.55397103549316,
     "recommended_alpha": 0.95
   },
   "top_parameters": [
     {
       "parameter_name": "beta_fire",
       "parameter_label": "fire penalty slope beta",
-      "importance_score": 6.392942718954724
+      "importance_score": 5.430069559682766
     },
     {
       "parameter_name": "max_drones",
       "parameter_label": "drone cap",
-      "importance_score": 0.14708942395021518
-    },
-    {
-      "parameter_name": "protection_leverage_scale",
-      "parameter_label": "protection leverage scale",
-      "importance_score": 0.09656274558358141
-    },
-    {
-      "parameter_name": "lambda_fire",
-      "parameter_label": "fire penalty weight lambda",
-      "importance_score": 0.05096984373944635
-    },
-    {
-      "parameter_name": "tau_fire_min",
-      "parameter_label": "fire threshold tau",
-      "importance_score": 0.04448555483039976
-    },
-    {
-      "parameter_name": "drone_response_speed_kmh",
-      "parameter_label": "drone response speed",
-      "importance_score": 0.016372508780796907
+      "importance_score": 0.13138360190778586
     },
     {
       "parameter_name": "max_cameras",
       "parameter_label": "camera cap",
-      "importance_score": 0.010067040704299618
+      "importance_score": 0.09421226102006985
+    },
+    {
+      "parameter_name": "protection_leverage_scale",
+      "parameter_label": "protection leverage scale",
+      "importance_score": 0.09161475019484489
+    },
+    {
+      "parameter_name": "waterhole_dispersion_benefit",
+      "parameter_label": "waterhole dispersion benefit",
+      "importance_score": 0.06093745362157211
+    },
+    {
+      "parameter_name": "lambda_fire",
+      "parameter_label": "fire penalty weight lambda",
+      "importance_score": 0.0487893283067047
+    },
+    {
+      "parameter_name": "tau_fire_min",
+      "parameter_label": "fire threshold tau",
+      "importance_score": 0.04208494982801986
     }
   ],
   "excluded_from_showcase": [

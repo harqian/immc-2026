@@ -489,6 +489,16 @@ def render_spatial_solution(context: dict[str, object]) -> None:
     boundary.boundary.plot(ax=axes[1, 0], color="black", linewidth=1.0)
     axes[1, 0].set_title("cell response times after responder assignment")
     axes[1, 0].set_axis_off()
+    sm = plt.cm.ScalarMappable(
+        cmap="YlGnBu",
+        norm=plt.Normalize(
+            vmin=cells["response_time_min"].min(),
+            vmax=cells["response_time_min"].max(),
+        ),
+    )
+    sm._A = []
+    cbar = fig.colorbar(sm, ax=axes[1, 0], fraction=0.03, pad=0.01, shrink=0.85)
+    cbar.set_label("response time (min)")
 
     responder_palette = {asset: RESPONDER_COLORS[asset] for asset in RESPONDER_COLORS}
     responder_colors = cells["selected_responder_asset"].map(responder_palette).fillna("#d4d4d8")
