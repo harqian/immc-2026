@@ -12,7 +12,7 @@ it first finds the maximum achievable protection score, then solves a response-m
 - scenario description: `placeholder optimization scenario for phase 1 schema validation`
 - active asset types: `car, drone, camera`
 - alpha values: `1.00, 0.95, 0.90`
-- solve-time budget from artifact: `42700`
+- solve-time budget from artifact: `2542700`
 - recommended alpha: `0.95`
 
 ![model structure](01_model_structure.png)
@@ -31,10 +31,10 @@ the model works over several linked object sets:
 for the current artifact:
 
 - cells in optimization output: `1007`
-- selected sites in chosen solution artifact: `98`
-- covered cells: `367`
-- uncovered cells: `640`
-- responder assignment counts: `car=207, drone=800`
+- selected sites in chosen solution artifact: `60`
+- covered cells: `390`
+- uncovered cells: `617`
+- responder assignment counts: `car=289, drone=717`
 
 ## decision variables and what they mean
 
@@ -45,7 +45,6 @@ the important variables in the Pyomo model are:
 - `site_active[site]`: whether a site incurs its fixed activation cost
 - `y[cell]`: whether a cell is considered covered
 - `z[arc]`: which real responder arc is assigned to a cell
-- `dummy[cell]`: whether the fallback 225-minute response is used instead of a real arc
 - `t[cell]`: realized response time for the cell
 - `fire_lambda[cell, breakpoint]` and `fire_penalty[cell]`: the piecewise-linear wildfire delay approximation
 - `u[intervention]`: whether a waterhole intervention is purchased
@@ -62,13 +61,13 @@ the model structure matters more than the exact coefficients:
 3. budget:
    the budget includes fixed site activation cost, capital cost for interventions, and only the asset units above the configured `included_*` baseline.
 4. asset caps:
-   total units by asset type must stay below `max_people`, `max_cars`, `max_drones`, and `max_cameras`.
+   total units by asset type must stay below `max_cars`, `max_drones`, and `max_cameras`.
 5. coverage feasibility:
    a cell can only be marked covered if at least one eligible mobile asset is active on one of the site-asset pairs that covers it.
 6. response assignment:
-   every cell must choose either one real response arc or the dummy fallback arc.
+   every cell is assigned a response arc.
 7. response-time interpolation:
-   `t[cell]` equals the selected response arc time, or 225 minutes for dummy service.
+   `t[cell]` equals the selected response arc time.
 8. wildfire penalty interpolation:
    `fire_lambda` forms a simplex over breakpoints so the model can linearly represent the fire delay penalty curve.
 
@@ -97,23 +96,22 @@ the frontier algorithm is:
 
 ## frontier results from the current artifact
 
-| alpha | coverage_target | achieved_protection | response_objective | budget_used | selected_site_count | selected_people | selected_cars | selected_drones | selected_cameras | selected_interventions |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1.000 | 180.044 | 180.044 | 3887.281 | 42695.000 | 57.000 | 0.000 | 55.000 | 19.000 | 0.000 | 3.000 |
-| 0.950 | 171.042 | 171.062 | 1987.290 | 42700.000 | 98.000 | 0.000 | 92.000 | 20.000 | 0.000 | 0.000 |
-| 0.900 | 162.040 | 162.049 | 1987.290 | 42700.000 | 98.000 | 0.000 | 79.000 | 20.000 | 0.000 | 0.000 |
+| alpha | coverage_target | achieved_protection | response_objective | budget_used | selected_site_count | selected_cars | selected_drones | selected_cameras | selected_interventions |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1.000 | 190.933 | 190.933 | 15779.665 | 83525.000 | 66.000 | 41.000 | 20.000 | 100.000 | 12.000 |
+| 0.950 | 181.387 | 181.414 | 8143.980 | 53975.000 | 60.000 | 40.000 | 20.000 | 90.000 | 1.000 |
+| 0.900 | 171.840 | 171.889 | 5559.590 | 30380.000 | 57.000 | 56.000 | 16.000 | 0.000 | 0.000 |
 
 the chosen artifact is the `alpha=0.95` point:
 
-- achieved protection: `171.062`
-- response objective: `1987.290`
-- budget used: `42700.0`
-- selected sites: `98`
-- selected people: `0`
-- selected cars: `92`
+- achieved protection: `181.414`
+- response objective: `8143.980`
+- budget used: `53975.0`
+- selected sites: `60`
+- selected cars: `40`
 - selected drones: `20`
-- selected cameras: `0`
-- selected interventions: `0`
+- selected cameras: `90`
+- selected interventions: `1`
 
 ## resource interpretation
 
@@ -122,10 +120,9 @@ if the current config is different, that difference is shown explicitly so you c
 
 | asset_type | selected_units | solve_time_cap | current_config_cap | current_included_baseline | unit_cost |
 | --- | --- | --- | --- | --- | --- |
-| people | 0 | 0 | 0 | 0 | 22470.000 |
-| cars | 92 | 100 | 100 | 100 | 7810.000 |
+| cars | 40 | 100 | 100 | 100 | 7810.000 |
 | drones | 20 | 20 | 20 | 0 | 1580.000 |
-| cameras | 0 | 100 | 100 | 0 | 160.000 |
+| cameras | 90 | 100 | 100 | 0 | 160.000 |
 
 notes:
 
@@ -144,7 +141,7 @@ the optimization does not just choose counts; it chooses where those resources s
 - the upper-left panel shows selected sites on top of the composite risk field.
 - the upper-right panel shows which cells satisfied the binary coverage logic.
 - the lower-left panel shows realized response time after the responder assignment step.
-- the lower-right panel shows whether each cell is served by an active responder asset type or the dummy fallback.
+- the lower-right panel shows which asset type serves each cell.
 
 ![spatial solution](04_spatial_solution.png)
 
@@ -160,18 +157,18 @@ the cell diagnostics highlight how the objective is assembled:
 artifact summary statistics:
 
 - response time min / p25 / median / p75 / max:
-  - `0.50` / `9.27` / `17.50` / `29.20` / `95.97`
+  - `0.50` / `10.14` / `18.78` / `31.89` / `225.00`
 - mean incremental protection gain:
-  - `0.0000`
+  - `0.0053`
 - max incremental protection gain:
-  - `0.0000`
+  - `0.2611`
 
 ![cell metrics](05_cell_metrics.png)
 
 ## what this walkthrough says about the current solve
 
 - the artifact is clearly a frontier solve, not a single-objective solve: response gets much better when alpha drops from `1.00` to `0.95`, while protection only drops slightly.
-- the chosen artifact is driven by `92 cars, and 20 drones`, with `0` cells still falling back to the dummy response.
+- the chosen artifact is driven by `40 cars, 20 drones, and 90 cameras`.
 - because the current config and current output artifact disagree on some caps, this walkthrough should be read as an explanation of the saved artifact, not as proof that the current config would reproduce the same answer.
 
 ## how to regenerate

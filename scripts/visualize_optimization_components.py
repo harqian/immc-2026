@@ -37,16 +37,14 @@ SPATIAL_FIG_PATH = COMPONENTS_DIR / "04_spatial_solution.png"
 METRICS_FIG_PATH = COMPONENTS_DIR / "05_cell_metrics.png"
 MARKDOWN_PATH = COMPONENTS_DIR / "optimization_components.md"
 
-ASSET_ORDER = ["person", "car", "drone", "camera"]
-ASSET_LABELS = {"person": "people", "car": "cars", "drone": "drones", "camera": "cameras"}
-RESPONDER_ORDER = ["person", "car", "drone", "dummy"]
+ASSET_ORDER = ["car", "drone", "camera"]
+ASSET_LABELS = {"car": "cars", "drone": "drones", "camera": "cameras"}
+RESPONDER_ORDER = ["car", "drone"]
 RESPONDER_LABELS = {
-    "person": "person",
     "car": "car",
     "drone": "drone",
-    "dummy": "dummy 225 min fallback",
 }
-RESPONDER_COLORS = {"person": "#126782", "car": "#2b9348", "drone": "#bc6c25", "dummy": "#9c6644"}
+RESPONDER_COLORS = {"car": "#2b9348", "drone": "#bc6c25"}
 
 
 def load_yaml(path: Path) -> dict[str, object]:
@@ -63,7 +61,7 @@ def build_context() -> dict[str, object]:
     frontier = pd.read_csv(FRONTIER_PATH).sort_values("alpha", ascending=False).reset_index(drop=True)
     solution = validate_geojson(
         SOLUTION_PATH,
-        ["site_id", "site_kind", "people_count", "car_count", "drone_count", "camera_count", "geometry"],
+        ["site_id", "site_kind", "car_count", "drone_count", "camera_count", "geometry"],
         "optimization solution",
     )
     cells = validate_parquet(
@@ -111,7 +109,6 @@ def build_context() -> dict[str, object]:
 
     chosen = summary["chosen_solution"]
     selected_units = {
-        "person": int(chosen["selected_people"]),
         "car": int(chosen["selected_cars"]),
         "drone": int(chosen["selected_drones"]),
         "camera": int(chosen["selected_cameras"]),
@@ -122,13 +119,11 @@ def build_context() -> dict[str, object]:
     current_included = None
     if current_availability is not None:
         current_caps = {
-            "person": int(current_availability["max_people"]),
             "car": int(current_availability["max_cars"]),
             "drone": int(current_availability["max_drones"]),
             "camera": int(current_availability["max_cameras"]),
         }
         current_included = {
-            "person": int(current_availability["included_people"]),
             "car": int(current_availability["included_cars"]),
             "drone": int(current_availability["included_drones"]),
             "camera": int(current_availability["included_cameras"]),
@@ -198,9 +193,8 @@ def compare_caps(context: dict[str, object]) -> list[dict[str, object]]:
 
 def ordered_responder_series(context: dict[str, object]) -> pd.Series:
     responder_counts = pd.Series(context["responder_counts"], dtype=float)
-    ordered_index = [asset for asset in RESPONDER_ORDER if asset in responder_counts.index]
-    extra_index = [asset for asset in responder_counts.index if asset not in ordered_index]
-    return responder_counts.reindex([*ordered_index, *extra_index]).fillna(0)
+    responder_counts = responder_counts.reindex([a for a in RESPONDER_ORDER if a in responder_counts.index]).fillna(0)
+    return responder_counts
 
 
 def summarize_responder_counts(context: dict[str, object]) -> str:
@@ -214,7 +208,6 @@ def summarize_selected_assets(chosen: dict[str, object]) -> str:
         ("cars", int(chosen["selected_cars"])),
         ("drones", int(chosen["selected_drones"])),
         ("cameras", int(chosen["selected_cameras"])),
-        ("people", int(chosen["selected_people"])),
     ]
     for label, value in asset_values:
         if value > 0:
@@ -315,7 +308,7 @@ def render_model_structure(context: dict[str, object]) -> None:
                     "budget counts only units above included baselines",
                     "total selected units must stay below max caps",
                     "cameras deploy only at waterholes in bundles",
-                    "each cell gets a real responder arc or a dummy 225 min arc",
+                    "each cell gets a responder arc assignment",
                     "fire penalty is piecewise-linear in response delay",
                 ]
             ),
@@ -614,7 +607,6 @@ def write_markdown(context: dict[str, object]) -> None:
             "response_objective",
             "budget_used",
             "selected_site_count",
-            "selected_people",
             "selected_cars",
             "selected_drones",
             "selected_cameras",
@@ -690,7 +682,6 @@ the important variables in the Pyomo model are:
 - `site_active[site]`: whether a site incurs its fixed activation cost
 - `y[cell]`: whether a cell is considered covered
 - `z[arc]`: which real responder arc is assigned to a cell
-- `dummy[cell]`: whether the fallback 225-minute response is used instead of a real arc
 - `t[cell]`: realized response time for the cell
 - `fire_lambda[cell, breakpoint]` and `fire_penalty[cell]`: the piecewise-linear wildfire delay approximation
 - `u[intervention]`: whether a waterhole intervention is purchased
@@ -707,13 +698,13 @@ the model structure matters more than the exact coefficients:
 3. budget:
    the budget includes fixed site activation cost, capital cost for interventions, and only the asset units above the configured `included_*` baseline.
 4. asset caps:
-   total units by asset type must stay below `max_people`, `max_cars`, `max_drones`, and `max_cameras`.
+   total units by asset type must stay below `max_cars`, `max_drones`, and `max_cameras`.
 5. coverage feasibility:
    a cell can only be marked covered if at least one eligible mobile asset is active on one of the site-asset pairs that covers it.
 6. response assignment:
-   every cell must choose either one real response arc or the dummy fallback arc.
+   every cell is assigned a response arc.
 7. response-time interpolation:
-   `t[cell]` equals the selected response arc time, or 225 minutes for dummy service.
+   `t[cell]` equals the selected response arc time.
 8. wildfire penalty interpolation:
    `fire_lambda` forms a simplex over breakpoints so the model can linearly represent the fire delay penalty curve.
 
@@ -750,7 +741,6 @@ the chosen artifact is the `alpha={chosen["alpha"]:.2f}` point:
 - response objective: `{chosen["response_objective"]:.3f}`
 - budget used: `{chosen["budget_used"]:.1f}`
 - selected sites: `{chosen["selected_site_count"]}`
-- selected people: `{chosen["selected_people"]}`
 - selected cars: `{chosen["selected_cars"]}`
 - selected drones: `{chosen["selected_drones"]}`
 - selected cameras: `{chosen["selected_cameras"]}`
@@ -780,7 +770,7 @@ the optimization does not just choose counts; it chooses where those resources s
 - the upper-left panel shows selected sites on top of the composite risk field.
 - the upper-right panel shows which cells satisfied the binary coverage logic.
 - the lower-left panel shows realized response time after the responder assignment step.
-- the lower-right panel shows whether each cell is served by an active responder asset type or the dummy fallback.
+- the lower-right panel shows which asset type serves each cell.
 
 ![spatial solution](04_spatial_solution.png)
 
@@ -807,7 +797,7 @@ artifact summary statistics:
 ## what this walkthrough says about the current solve
 
 - the artifact is clearly a frontier solve, not a single-objective solve: response gets much better when alpha drops from `1.00` to `0.95`, while protection only drops slightly.
-- the chosen artifact is driven by `{summarize_selected_assets(chosen)}`, with `{int(responder_counts.get("dummy", 0))}` cells still falling back to the dummy response.
+- the chosen artifact is driven by `{summarize_selected_assets(chosen)}`.
 - because the current config and current output artifact disagree on some caps, this walkthrough should be read as an explanation of the saved artifact, not as proof that the current config would reproduce the same answer.
 
 ## how to regenerate

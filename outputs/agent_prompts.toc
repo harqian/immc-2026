@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Claude Code}{2}{}%
+\contentsline {subsection}{\numberline {1.1}Session 1 (2026-03-22)}{2}{}%
+\contentsline {subsection}{\numberline {1.2}Session 2 (2026-03-23)}{2}{}%
+\contentsline {subsection}{\numberline {1.3}Session 3 (2026-03-22)}{5}{}%
+\contentsline {subsection}{\numberline {1.4}Session 4 (2026-03-23)}{5}{}%
+\contentsline {subsection}{\numberline {1.5}Session 5 (2026-03-22)}{8}{}%
+\contentsline {subsection}{\numberline {1.6}Session 6 (2026-03-22)}{10}{}%
+\contentsline {section}{\numberline {2}Codex}{11}{}%
+\contentsline {subsection}{\numberline {2.1}Session 1 (2026-03-19)}{11}{}%
+\contentsline {subsection}{\numberline {2.2}Session 2 (2026-03-19)}{12}{}%
+\contentsline {subsection}{\numberline {2.3}Session 3 (2026-03-19)}{15}{}%
+\contentsline {subsection}{\numberline {2.4}Session 4 (2026-03-20)}{16}{}%
+\contentsline {subsection}{\numberline {2.5}Session 5 (2026-03-20)}{16}{}%
+\contentsline {subsection}{\numberline {2.6}Session 6 (2026-03-20)}{19}{}%
+\contentsline {subsection}{\numberline {2.7}Session 7 (2026-03-20)}{23}{}%
+\contentsline {subsection}{\numberline {2.8}Session 8 (2026-03-21)}{24}{}%
+\contentsline {subsection}{\numberline {2.9}Session 9 (2026-03-21)}{25}{}%
+\contentsline {subsection}{\numberline {2.10}Session 10 (2026-03-21)}{26}{}%
+\contentsline {subsection}{\numberline {2.11}Session 11 (2026-03-21)}{26}{}%
+\contentsline {subsection}{\numberline {2.12}Session 12 (2026-03-21)}{27}{}%
+\contentsline {subsection}{\numberline {2.13}Session 13 (2026-03-21)}{31}{}%
+\contentsline {subsection}{\numberline {2.14}Session 14 (2026-03-21)}{32}{}%
+\contentsline {subsection}{\numberline {2.15}Session 15 (2026-03-21)}{32}{}%
+\contentsline {subsection}{\numberline {2.16}Session 16 (2026-03-22)}{33}{}%
+\contentsline {subsection}{\numberline {2.17}Session 17 (2026-03-22)}{33}{}%
+\contentsline {subsection}{\numberline {2.18}Session 18 (2026-03-22)}{33}{}%
