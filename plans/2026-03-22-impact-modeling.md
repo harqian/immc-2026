@@ -402,9 +402,9 @@ Build `scripts/21_visualize_impact.py` to produce publication-quality figures ma
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Script runs without error: `act && python3 scripts/21_visualize_impact.py`
-- [ ] All 4 PNG files exist and are non-empty
-- [ ] No matplotlib warnings about missing data
+- [x] Script runs without error: `act && python3 scripts/21_visualize_impact.py`
+- [x] All 4 PNG files exist and are non-empty
+- [x] No matplotlib warnings about missing data
 
 #### Manual Verification:
 - [ ] Population trajectories show clear separation between baseline and optimized
