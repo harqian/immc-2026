@@ -345,13 +345,13 @@ main()                  → orchestrates everything
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Script runs without error: `act && python3 scripts/20_impact_simulation.py`
-- [ ] `outputs/impact_simulation.csv` exists and has expected columns
-- [ ] `outputs/impact_summary.json` exists and is valid JSON
-- [ ] No negative populations in CSV
-- [ ] Optimized scenario has strictly fewer cumulative deaths than baseline for all 4 species
-- [ ] Fire intensity F(t) stays in [0, 1]
-- [ ] Poaching effort P(t) stays non-negative
+- [x] Script runs without error: `act && python3 scripts/20_impact_simulation.py`
+- [x] `outputs/impact_simulation.csv` exists and has expected columns
+- [x] `outputs/impact_summary.json` exists and is valid JSON
+- [x] No negative populations in CSV
+- [x] Optimized scenario has strictly fewer cumulative deaths than baseline for all 4 species
+- [x] Fire intensity F(t) stays in [0, 1]
+- [x] Poaching effort P(t) stays non-negative
 
 #### Manual Verification:
 - [ ] Final populations are ecologically plausible (no species at 0 unless truly driven to extinction, no unrealistic growth)

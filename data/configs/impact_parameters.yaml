@@ -7,71 +7,71 @@ species:
   zebra:
     N0: 13000
     r_s: null          # governed by LV, not logistic
-    mu_fire_base: 0.003
-    alpha_poach_base: 0.0003
+    mu_fire_base: 0.00015
+    alpha_poach_base: 0.0001
     w_poach: 0.08
-    beta_tourism: 0.0003   # scaled down from paper's 0.3 by 1/1000
+    beta_tourism: 0.0001
     resource_requirements:
-      water: 0.005
-      forage: 0.006
-      space: 0.004
+      water: 0.05
+      forage: 0.06
+      space: 0.04
   lion:
     N0: 500
     r_s: null          # governed by LV
-    mu_fire_base: 0.01
-    alpha_poach_base: 0.006
+    mu_fire_base: 0.0005
+    alpha_poach_base: 0.001
     w_poach: 0.7
-    beta_tourism: 0.0006
+    beta_tourism: 0.0002
     resource_requirements:
-      water: 0.008
-      forage: 0.002
-      space: 0.012
+      water: 0.08
+      forage: 0.02
+      space: 0.12
   elephant:
     N0: 2500
     r_s: 0.0003        # slow reproduction
-    mu_fire_base: 0.015
-    alpha_poach_base: 0.008
+    mu_fire_base: 0.0002
+    alpha_poach_base: 0.0003
     w_poach: 1.0
-    beta_tourism: 0.0007
+    beta_tourism: 0.0002
     resource_requirements:
-      water: 0.015
-      forage: 0.012
-      space: 0.008
+      water: 0.15
+      forage: 0.12
+      space: 0.08
   black_rhino:
     N0: 70
     r_s: 0.0004
-    mu_fire_base: 0.02
-    alpha_poach_base: 0.012
+    mu_fire_base: 0.0003
+    alpha_poach_base: 0.0003
     w_poach: 1.5
-    beta_tourism: 0.0008
+    beta_tourism: 0.0003
     resource_requirements:
-      water: 0.010
-      forage: 0.008
-      space: 0.010
+      water: 0.10
+      forage: 0.08
+      space: 0.10
 
 lotka_volterra:
-  lambda_1: 0.002       # zebra intrinsic growth (daily)
-  lambda_2: 0.000005    # lion conversion efficiency
-  gamma: 0.000008       # predation rate
-  delta: 0.0008         # lion natural death rate (daily)
-  zeta: 0.000002        # lion intraspecific competition
+  lambda_1: 0.0015      # zebra intrinsic growth (~55%/yr before density dependence)
+  lambda_2: 0.14         # lion conversion efficiency from predation
+  gamma: 0.000001        # predation rate (~6.5 zebra/day at equilibrium, ~1.5%/month)
+  delta: 0.0003          # lion natural death rate (~9yr lifespan)
+  zeta: 0.000002         # lion intraspecific competition
 
 resources:
   water:
     R0: 1000.0
     r_h: 0.02           # recovery rate
-    lambda_fire: 0.3    # fire damage rate
-    lambda_tour: 0.05   # tourism damage rate
+    lambda_fire: 0.03    # fire degrades water sources
+    lambda_tour: 0.005   # tourism infrastructure affects water
   forage:
     R0: 1000.0
     r_h: 0.03           # grassland recovers faster
-    lambda_fire: 0.5    # fire heavily damages forage
-    lambda_tour: 0.02
+    lambda_fire: 0.05    # fire heavily damages forage
+    lambda_tour: 0.002
   space:
     R0: 1000.0
     r_h: 0.01           # habitat structure slow to recover
-    lambda_fire: 0.1    # fire has less effect on space
-    lambda_tour: 0.08   # infrastructure permanently reduces space
+    lambda_fire: 0.01    # fire has less effect on space
+    lambda_tour: 0.008   # infrastructure permanently reduces space
 
 wildfire:
   gamma_0: 0.6
@@ -99,7 +99,6 @@ tourism:
   w_p: 0.2
   V_max: 1000
   W_max: 500
-  # driving functions (seasonal with growth)
   V_base: 400           # base daily visitors
   V_amplitude: 200      # seasonal swing
   V_growth_rate: 0.0001 # slow annual growth
