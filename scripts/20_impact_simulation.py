@@ -66,6 +66,26 @@ def compute_optimization_linkage(cells: pd.DataFrame, summary: dict, linkage_cfg
     return float(u_opt), float(lambda_opt), float(beta_reduction)
 
 
+def build_rainfall_interpolator(cfg_rain: dict):
+    """build a smooth daily rainfall fraction from monthly mm totals.
+    returns a function rain_frac(t) in [dry_floor, 1]."""
+    monthly = np.array(cfg_rain["monthly_mm"], dtype=float)
+    max_mm = monthly.max()
+    dry_floor = cfg_rain["dry_floor"]
+    # mid-day of each month (Jan=15, Feb=46, ...)
+    mid_days = np.array([15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349], dtype=float)
+    # normalize to [0, 1] then scale to [dry_floor, 1]
+    fracs = dry_floor + (1 - dry_floor) * monthly / max_mm
+    # extend periodically for smooth interpolation
+    mid_ext = np.concatenate([mid_days - 365, mid_days, mid_days + 365])
+    frac_ext = np.concatenate([fracs, fracs, fracs])
+
+    def rain_frac(t: float) -> float:
+        day_in_year = t % 365.0
+        return float(np.interp(day_in_year, mid_days, fracs))
+    return rain_frac
+
+
 def compute_tourism(t: float, cfg_tour: dict) -> float:
     V = cfg_tour["V_base"] + cfg_tour["V_amplitude"] * np.cos(2 * np.pi * (t - cfg_tour["t_peak_tourism"]) / 365.0)
     V *= (1 + cfg_tour["V_growth_rate"] * t)
@@ -84,6 +104,8 @@ def make_rhs(cfg: dict, u_opt: float, lambda_opt: float, beta_reduction: float):
     wf = cfg["wildfire"]
     po = cfg["poaching"]
     tour_cfg = cfg["tourism"]
+    rain_fn = build_rainfall_interpolator(cfg["rainfall"])
+    forage_lag = cfg["rainfall"]["forage_lag_days"]
 
     # pre-extract species params in order
     species_keys = SPECIES_NAMES
@@ -158,12 +180,15 @@ def make_rhs(cfg: dict, u_opt: float, lambda_opt: float, beta_reduction: float):
         cost = omega_p + sigma_p * enforcement
         dP = gamma_p * P * (revenue - cost)
 
-        # --- resource dynamics (no consumption; r_{m,s} used only for K mapping) ---
+        # --- resource dynamics (recovery modulated by rainfall) ---
+        rain_water = rain_fn(t)
+        rain_forage = rain_fn(t - forage_lag)  # vegetation lags rainfall
+        rain_mods = [rain_water, rain_forage, 1.0]  # space not rainfall-dependent
         Rs = [R_w, R_f, R_sp]
         dRs = [0.0, 0.0, 0.0]
         for m in range(3):
             R_m = max(Rs[m], 0)
-            recovery = r_hs[m] * (R0s[m] - R_m)
+            recovery = r_hs[m] * rain_mods[m] * (R0s[m] - R_m)
             fire_damage = lam_fires[m] * F * R_m
             tour_damage = lam_tours[m] * T_val * R_m
             dRs[m] = recovery - fire_damage - tour_damage

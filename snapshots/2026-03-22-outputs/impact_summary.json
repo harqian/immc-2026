@@ -1,0 +1,79 @@
+{
+  "scenarios": {
+    "baseline": {
+      "final_populations": {
+        "zebra": 8276.697747587345,
+        "lion": 218.48458145804935,
+        "elephant": 1683.2584860543507,
+        "black_rhino": 51.6044853947475
+      },
+      "cumulative_deaths": {
+        "zebra": 2698.815673002568,
+        "lion": 498.38362793641846,
+        "elephant": 1404.458905835926,
+        "black_rhino": 61.960962108777494
+      },
+      "deaths_by_threat": {
+        "wildfire": 2832.0569872849155,
+        "poaching": 863.9207477558322,
+        "tourism": 967.641433842936
+      },
+      "min_populations": {
+        "zebra": 8232.563925358743,
+        "lion": 218.48458145804935,
+        "elephant": 1683.2584860543507,
+        "black_rhino": 51.60407822698897
+      }
+    },
+    "optimized": {
+      "final_populations": {
+        "zebra": 9080.3000044761,
+        "lion": 376.690326476788,
+        "elephant": 2248.065183705317,
+        "black_rhino": 80.47241821761169
+      },
+      "cumulative_deaths": {
+        "zebra": 2021.810138602344,
+        "lion": 344.5179287220363,
+        "elephant": 907.687810329467,
+        "black_rhino": 42.27360490184943
+      },
+      "deaths_by_threat": {
+        "wildfire": 2050.8892177262833,
+        "poaching": 351.9816902545539,
+        "tourism": 913.418574574855
+      },
+      "min_populations": {
+        "zebra": 9043.977431797783,
+        "lion": 375.87033294662774,
+        "elephant": 2239.63027653357,
+        "black_rhino": 68.96406416023115
+      }
+    }
+  },
+  "improvement": {
+    "population_change_pct": {
+      "zebra": 9.709213522059624,
+      "lion": 72.41048497013294,
+      "elephant": 33.55436508001239,
+      "black_rhino": 55.94074352653554
+    },
+    "deaths_averted": {
+      "zebra": 677.005534400224,
+      "lion": 153.86569921438218,
+      "elephant": 496.7710955064591,
+      "black_rhino": 19.687357206928063
+    },
+    "deaths_averted_pct": {
+      "zebra": 25.085282450839678,
+      "lion": 30.872944171836174,
+      "elephant": 35.370995437618994,
+      "black_rhino": 31.77380811544745
+    }
+  },
+  "optimization_linkage": {
+    "u_opt": 0.5129224652087475,
+    "lambda_opt": 3.11029375510434,
+    "beta_reduction": 0.15000000000000002
+  }
+}

@@ -561,12 +561,14 @@ def build_model(
 
     model.protection_expr = pyo.Expression(rule=protection_expr)
     tourism_costs = data.interventions.set_index("intervention_site_id")["tourism_cost"].to_dict()
+    lambda_cost = float(data.availability.get("lambda_cost", 0.0))
     model.response_expr = pyo.Expression(
         expr=
         sum(data.composite_risk[cell_id] * model.t[cell_id] for cell_id in model.CELLS)
         + float(data.availability["lambda_fire"])
         * sum(data.wildfire_risk[cell_id] * model.fire_penalty[cell_id] for cell_id in model.CELLS)
         + sum(float(tourism_costs[intervention_id]) * model.u[intervention_id] for intervention_id in model.INTERVENTIONS)
+        + lambda_cost * sum(budget_terms)
     )
 
     if coverage_floor is not None:

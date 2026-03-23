@@ -13,7 +13,7 @@ species:
     beta_tourism: 0.0001
     resource_requirements:
       water: 0.05
-      forage: 0.06
+      forage: 0.05
       space: 0.04
   lion:
     N0: 500
@@ -59,13 +59,13 @@ lotka_volterra:
 resources:
   water:
     R0: 1000.0
-    r_h: 0.02           # recovery rate
-    lambda_fire: 0.03    # fire degrades water sources
+    r_h: 0.04           # permanent springs recover relatively fast
+    lambda_fire: 0.01    # fire doesn't drain waterholes
     lambda_tour: 0.005   # tourism infrastructure affects water
   forage:
     R0: 1000.0
-    r_h: 0.03           # grassland recovers faster
-    lambda_fire: 0.05    # fire heavily damages forage
+    r_h: 0.05           # grassland recovers fast in wet season
+    lambda_fire: 0.02    # fire damages forage
     lambda_tour: 0.002
   space:
     R0: 1000.0
@@ -106,6 +106,12 @@ tourism:
   W_base: 200
   W_amplitude: 100
   P_infra: 0.15         # permanent infrastructure level (normalized)
+
+rainfall:
+  # monthly rainfall in mm for Etosha (Jan=month 0)
+  monthly_mm: [93, 99, 78, 25, 0, 0, 0, 0, 0, 10, 32, 42]
+  dry_floor: 0.3           # groundwater-fed waterholes maintain base recovery
+  forage_lag_days: 30       # vegetation responds ~1 month after rain
 
 optimization_linkage:
   fire_suppression_scale: 1.0      # how much coverage translates to u(t)

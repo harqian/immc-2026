@@ -1,0 +1,380 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 980" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+    <marker id="arr-gray" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#999"/>
+    </marker>
+    <filter id="sh" x="-3%" y="-3%" width="108%" height="112%">
+      <feDropShadow dx="1" dy="1.5" stdDeviation="2.5" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="1100" height="980" fill="#FAFBFC" rx="6"/>
+
+  <!-- ═══════════════════════════ -->
+  <!-- TOP: Model title           -->
+  <!-- ═══════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="385" y="20" width="330" height="44" rx="22" fill="#2C3E50" stroke="none"/>
+    <text x="550" y="48" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">Etosha Protection Model</text>
+  </g>
+
+  <!-- three arrows down from title -->
+  <line x1="440" y1="64" x2="210" y2="108" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="550" y1="64" x2="550" y2="108" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="660" y1="64" x2="890" y2="108" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- PILLAR 1: Risk Assessment (Req. 1) -->
+  <!-- ═══════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="70" y="112" width="280" height="40" rx="8" fill="#E8F5E9" stroke="#43A047" stroke-width="1.5"/>
+    <text x="210" y="137" text-anchor="middle" font-size="13" font-weight="700" fill="#2E7D32">1. Risk Assessment  (Req. 1)</text>
+  </g>
+
+  <!-- threat categories -->
+  <line x1="130" y1="152" x2="130" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="290" y1="152" x2="290" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="60" y="183" width="140" height="32" rx="6" fill="#FFEBEE" stroke="#E53935" stroke-width="1"/>
+    <text x="130" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="#C62828">Human Threats</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="220" y="183" width="140" height="32" rx="6" fill="#FFF3E0" stroke="#FB8C00" stroke-width="1"/>
+    <text x="290" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="#E65100">Natural Threats</text>
+  </g>
+
+  <!-- human threat children -->
+  <line x1="100" y1="215" x2="80" y2="238" stroke="#E53935" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="160" y1="215" x2="180" y2="238" stroke="#E53935" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="30" y="242" width="100" height="28" rx="5" fill="#FFCDD2" stroke="#E53935" stroke-width="0.8"/>
+    <text x="80" y="261" text-anchor="middle" font-size="10" fill="#B71C1C">Poaching</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="140" y="242" width="100" height="28" rx="5" fill="#FFCDD2" stroke="#E53935" stroke-width="0.8"/>
+    <text x="190" y="261" text-anchor="middle" font-size="10" fill="#B71C1C">Tourism</text>
+  </g>
+
+  <!-- natural threat children -->
+  <line x1="260" y1="215" x2="260" y2="238" stroke="#FB8C00" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="320" y1="215" x2="340" y2="238" stroke="#FB8C00" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="215" y="242" width="90" height="28" rx="5" fill="#FFE0B2" stroke="#FB8C00" stroke-width="0.8"/>
+    <text x="260" y="261" text-anchor="middle" font-size="10" fill="#E65100">Wildfire</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="315" y="242" width="90" height="28" rx="5" fill="#FFE0B2" stroke="#FB8C00" stroke-width="0.8"/>
+    <text x="360" y="261" text-anchor="middle" font-size="10" fill="#E65100">Drought</text>
+  </g>
+
+  <!-- species × spatial layers -->
+  <line x1="130" y1="270" x2="130" y2="294" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="260" y1="270" x2="260" y2="294" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- species input -->
+  <g filter="url(#sh)">
+    <rect x="50" y="298" width="160" height="28" rx="5" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="0.8"/>
+    <text x="130" y="317" text-anchor="middle" font-size="10" fill="#283593">Species layers (KDE, proxy)</text>
+  </g>
+
+  <!-- spatial features -->
+  <g filter="url(#sh)">
+    <rect x="220" y="298" width="160" height="28" rx="5" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="0.8"/>
+    <text x="300" y="317" text-anchor="middle" font-size="10" fill="#283593">Hex grid spatial features</text>
+  </g>
+
+  <!-- converge to risk output -->
+  <line x1="130" y1="326" x2="190" y2="358" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="300" y1="326" x2="240" y2="358" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="110" y="362" width="210" height="44" rx="8" fill="#C8E6C9" stroke="#43A047" stroke-width="1.5"/>
+    <text x="215" y="381" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1B5E20">Output: risk tensor</text>
+    <text x="215" y="396" text-anchor="middle" font-size="10" fill="#2E7D32">R[zone × species × threat]</text>
+  </g>
+
+  <!-- ═══════════════════════════════════ -->
+  <!-- PILLAR 2: Optimization (Req. 2)    -->
+  <!-- ═══════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="410" y="112" width="280" height="40" rx="8" fill="#E3F2FD" stroke="#1E88E5" stroke-width="1.5"/>
+    <text x="550" y="137" text-anchor="middle" font-size="13" font-weight="700" fill="#1565C0">2. Optimization  (Req. 2)</text>
+  </g>
+
+  <!-- two branches: surveillance, proactive -->
+  <line x1="490" y1="152" x2="480" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="610" y1="152" x2="620" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="410" y="183" width="140" height="32" rx="6" fill="#BBDEFB" stroke="#1E88E5" stroke-width="1"/>
+    <text x="480" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="#0D47A1">Surveillance</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="560" y="183" width="140" height="32" rx="6" fill="#BBDEFB" stroke="#1E88E5" stroke-width="1"/>
+    <text x="630" y="204" text-anchor="middle" font-size="11" font-weight="600" fill="#0D47A1">Proactive</text>
+  </g>
+
+  <!-- surveillance children -->
+  <line x1="450" y1="215" x2="440" y2="238" stroke="#1E88E5" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="510" y1="215" x2="530" y2="238" stroke="#1E88E5" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="395" y="242" width="90" height="28" rx="5" fill="#E3F2FD" stroke="#1E88E5" stroke-width="0.8"/>
+    <text x="440" y="261" text-anchor="middle" font-size="10" fill="#0D47A1">Drones</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="495" y="242" width="90" height="28" rx="5" fill="#E3F2FD" stroke="#1E88E5" stroke-width="0.8"/>
+    <text x="540" y="261" text-anchor="middle" font-size="10" fill="#0D47A1">Cameras</text>
+  </g>
+
+  <!-- proactive children -->
+  <line x1="600" y1="215" x2="600" y2="238" stroke="#1E88E5" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="660" y1="215" x2="680" y2="238" stroke="#1E88E5" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="555" y="242" width="100" height="28" rx="5" fill="#E3F2FD" stroke="#1E88E5" stroke-width="0.8"/>
+    <text x="605" y="261" text-anchor="middle" font-size="10" fill="#0D47A1">Dehorning</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="665" y="242" width="100" height="28" rx="5" fill="#E3F2FD" stroke="#1E88E5" stroke-width="0.8"/>
+    <text x="715" y="261" text-anchor="middle" font-size="10" fill="#0D47A1">Firebreaks</text>
+  </g>
+
+  <!-- risk weights arrow (dashed) from Pillar 1 output to optimizer -->
+  <path d="M 320 384 Q 380 384 430 370 Q 480 356 530 340" fill="none" stroke="#999" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arr-gray)"/>
+  <text x="420" y="348" font-size="9" fill="#777" font-style="italic">risk weights</text>
+
+  <!-- converge to optimizer -->
+  <line x1="480" y1="270" x2="540" y2="340" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="630" y1="270" x2="570" y2="340" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="460" y="345" width="200" height="58" rx="8" fill="#90CAF9" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="560" y="367" text-anchor="middle" font-size="11" font-weight="600" fill="#0D47A1">MIP → LP relaxation</text>
+    <text x="560" y="383" text-anchor="middle" font-size="10" fill="#1565C0">max coverage</text>
+    <text x="560" y="397" text-anchor="middle" font-size="10" fill="#1565C0">min response time</text>
+  </g>
+
+  <!-- optimizer output -->
+  <line x1="560" y1="403" x2="560" y2="432" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <g filter="url(#sh)">
+    <rect x="455" y="437" width="210" height="40" rx="8" fill="#BBDEFB" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="560" y="453" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0D47A1">Output: deployment plan</text>
+    <text x="560" y="468" text-anchor="middle" font-size="10" fill="#1565C0">sites × assets × Pareto frontier</text>
+  </g>
+
+  <!-- ════════════════════════════════════ -->
+  <!-- PILLAR 3: Impact / Time (Req. 3)    -->
+  <!-- ════════════════════════════════════ -->
+  <g filter="url(#sh)">
+    <rect x="750" y="112" width="280" height="40" rx="8" fill="#FFF3E0" stroke="#F57C00" stroke-width="1.5"/>
+    <text x="890" y="137" text-anchor="middle" font-size="13" font-weight="700" fill="#E65100">3. Impact / Time  (Req. 3)</text>
+  </g>
+
+  <!-- three impact branches -->
+  <line x1="830" y1="152" x2="810" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="890" y1="152" x2="890" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <line x1="950" y1="152" x2="970" y2="178" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="755" y="183" width="110" height="32" rx="6" fill="#FFCCBC" stroke="#E64A19" stroke-width="1"/>
+    <text x="810" y="204" text-anchor="middle" font-size="10.5" font-weight="600" fill="#BF360C">Wildfire</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="835" y="183" width="110" height="32" rx="6" fill="#E1BEE7" stroke="#8E24AA" stroke-width="1"/>
+    <text x="890" y="204" text-anchor="middle" font-size="10.5" font-weight="600" fill="#6A1B9A">Poaching</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="915" y="183" width="110" height="32" rx="6" fill="#B3E5FC" stroke="#0288D1" stroke-width="1"/>
+    <text x="970" y="204" text-anchor="middle" font-size="10.5" font-weight="600" fill="#01579B">Tourism</text>
+  </g>
+
+  <!-- impact mechanism details -->
+  <!-- fire sub-items -->
+  <line x1="810" y1="215" x2="810" y2="238" stroke="#E64A19" stroke-width="1" marker-end="url(#arr)"/>
+  <g filter="url(#sh)">
+    <rect x="755" y="242" width="110" height="46" rx="5" fill="#FFF" stroke="#E64A19" stroke-width="0.8"/>
+    <text x="810" y="258" text-anchor="middle" font-size="9" fill="#555">dF/dt dynamics</text>
+    <text x="810" y="270" text-anchor="middle" font-size="9" fill="#555">seasonal dryness</text>
+    <text x="810" y="282" text-anchor="middle" font-size="9" fill="#555">suppression c(t)</text>
+  </g>
+
+  <!-- poaching sub-items -->
+  <line x1="890" y1="215" x2="890" y2="238" stroke="#8E24AA" stroke-width="1" marker-end="url(#arr)"/>
+  <g filter="url(#sh)">
+    <rect x="835" y="242" width="110" height="46" rx="5" fill="#FFF" stroke="#8E24AA" stroke-width="0.8"/>
+    <text x="890" y="258" text-anchor="middle" font-size="9" fill="#555">dP/dt adaptive</text>
+    <text x="890" y="270" text-anchor="middle" font-size="9" fill="#555">prey pool 𝒩(t)</text>
+    <text x="890" y="282" text-anchor="middle" font-size="9" fill="#555">enforcement Λ</text>
+  </g>
+
+  <!-- tourism sub-items -->
+  <line x1="970" y1="215" x2="970" y2="238" stroke="#0288D1" stroke-width="1" marker-end="url(#arr)"/>
+  <g filter="url(#sh)">
+    <rect x="915" y="242" width="110" height="46" rx="5" fill="#FFF" stroke="#0288D1" stroke-width="0.8"/>
+    <text x="970" y="258" text-anchor="middle" font-size="9" fill="#555">T(t) disturbance</text>
+    <text x="970" y="270" text-anchor="middle" font-size="9" fill="#555">threshold θ_s</text>
+    <text x="970" y="282" text-anchor="middle" font-size="9" fill="#555">infrastructure P</text>
+  </g>
+
+  <!-- three effects row -->
+  <line x1="810" y1="288" x2="830" y2="314" stroke="#E64A19" stroke-width="0.8" marker-end="url(#arr)"/>
+  <line x1="890" y1="288" x2="890" y2="314" stroke="#8E24AA" stroke-width="0.8" marker-end="url(#arr)"/>
+  <line x1="970" y1="288" x2="950" y2="314" stroke="#0288D1" stroke-width="0.8" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="775" y="318" width="100" height="24" rx="4" fill="#FBE9E7" stroke="#E64A19" stroke-width="0.7"/>
+    <text x="825" y="334" text-anchor="middle" font-size="9" fill="#BF360C">Mortality</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="840" y="345" width="100" height="24" rx="4" fill="#FBE9E7" stroke="#E64A19" stroke-width="0.7"/>
+    <text x="890" y="361" text-anchor="middle" font-size="9" fill="#BF360C">Displacement</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="905" y="318" width="115" height="24" rx="4" fill="#FBE9E7" stroke="#E64A19" stroke-width="0.7"/>
+    <text x="963" y="334" text-anchor="middle" font-size="9" fill="#BF360C">Habitat damage</text>
+  </g>
+
+  <!-- cross-interaction: tourism deters poaching -->
+  <path d="M 915 198 Q 900 195 890 198" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="903" y="192" text-anchor="middle" font-size="7.5" fill="#999">deters</text>
+
+  <!-- intervention arrow from optimization to impact -->
+  <path d="M 665 457 Q 720 457 740 430 Q 760 400 790 384" fill="none" stroke="#999" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arr-gray)"/>
+  <text x="720" y="415" font-size="9" fill="#777" font-style="italic">interventions</text>
+
+  <!-- convergence to Lotka-Volterra -->
+  <line x1="825" y1="342" x2="870" y2="400" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="890" y1="369" x2="890" y2="400" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="963" y1="342" x2="910" y2="400" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="790" y="405" width="200" height="48" rx="8" fill="#FFE0B2" stroke="#F57C00" stroke-width="1.5"/>
+    <text x="890" y="425" text-anchor="middle" font-size="11" font-weight="600" fill="#E65100">Lotka–Volterra</text>
+    <text x="890" y="442" text-anchor="middle" font-size="10" fill="#E65100">+ intervention terms</text>
+  </g>
+
+  <!-- resources feeding into L-V -->
+  <g filter="url(#sh)">
+    <rect x="755" y="470" width="80" height="26" rx="5" fill="#FFF" stroke="#F57C00" stroke-width="0.8"/>
+    <text x="795" y="488" text-anchor="middle" font-size="9.5" fill="#E65100">Rangers</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="845" y="470" width="80" height="26" rx="5" fill="#FFF" stroke="#F57C00" stroke-width="0.8"/>
+    <text x="885" y="488" text-anchor="middle" font-size="9.5" fill="#E65100">Vehicles</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="935" y="470" width="95" height="26" rx="5" fill="#FFF" stroke="#F57C00" stroke-width="0.8"/>
+    <text x="983" y="488" text-anchor="middle" font-size="9.5" fill="#E65100">Waterholes</text>
+  </g>
+
+  <line x1="795" y1="496" x2="850" y2="520" stroke="#555" stroke-width="0.8" marker-end="url(#arr)"/>
+  <line x1="885" y1="496" x2="880" y2="520" stroke="#555" stroke-width="0.8" marker-end="url(#arr)"/>
+  <line x1="983" y1="496" x2="920" y2="520" stroke="#555" stroke-width="0.8" marker-end="url(#arr)"/>
+
+  <!-- black rhino priority -->
+  <g filter="url(#sh)">
+    <rect x="810" y="524" width="170" height="32" rx="6" fill="#FCE4EC" stroke="#C2185B" stroke-width="1"/>
+    <text x="895" y="545" text-anchor="middle" font-size="10.5" font-weight="600" fill="#880E4F">Black rhino priority</text>
+  </g>
+
+  <line x1="895" y1="556" x2="895" y2="578" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- Population N(t) -->
+  <g filter="url(#sh)">
+    <rect x="810" y="583" width="170" height="40" rx="8" fill="#FFE0B2" stroke="#F57C00" stroke-width="1.5"/>
+    <text x="895" y="601" text-anchor="middle" font-size="11" font-weight="600" fill="#E65100">Population N_s(t)</text>
+    <text x="895" y="616" text-anchor="middle" font-size="9.5" fill="#E65100">per species, daily</text>
+  </g>
+
+  <!-- feedback loop from N(t) back to poaching prey pool -->
+  <path d="M 980 603 Q 1040 603 1040 270 Q 1040 250 945 265" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#arr-gray)"/>
+  <text x="1050" y="430" font-size="8.5" fill="#999" font-style="italic" transform="rotate(90 1050 430)">prey pool feedback</text>
+
+  <!-- staffing output -->
+  <line x1="895" y1="623" x2="895" y2="650" stroke="#555" stroke-width="1.2" marker-end="url(#arr)"/>
+  <g filter="url(#sh)">
+    <rect x="810" y="655" width="170" height="36" rx="8" fill="#FFE0B2" stroke="#F57C00" stroke-width="1.5"/>
+    <text x="895" y="673" text-anchor="middle" font-size="10.5" font-weight="600" fill="#E65100">Output: staffing needs</text>
+    <text x="895" y="685" text-anchor="middle" font-size="9.5" fill="#E65100">personnel over time</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- BOTTOM: Sensitivity Analysis (Req. 4)  -->
+  <!-- ═══════════════════════════════════════ -->
+
+  <!-- horizontal rule -->
+  <line x1="80" y1="750" x2="1020" y2="750" stroke="#DDD" stroke-width="1" stroke-dasharray="8,4"/>
+
+  <g filter="url(#sh)">
+    <rect x="380" y="775" width="340" height="40" rx="8" fill="#FFF9C4" stroke="#F9A825" stroke-width="1.5"/>
+    <text x="550" y="800" text-anchor="middle" font-size="13" font-weight="700" fill="#F57F17">4. Sensitivity Analysis  (Req. 4)</text>
+  </g>
+
+  <!-- arrows up from sensitivity to all three pillars -->
+  <path d="M 430 775 Q 380 740 215 710 Q 215 700 215 693" fill="none" stroke="#F9A825" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <path d="M 550 775 L 550 710 Q 550 700 560 693" fill="none" stroke="#F9A825" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <path d="M 670 775 Q 720 740 895 710 Q 895 700 895 693" fill="none" stroke="#F9A825" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+
+  <text x="280" y="738" font-size="9" fill="#F57F17" font-style="italic">perturb risk weights</text>
+  <text x="550" y="738" text-anchor="middle" font-size="9" fill="#F57F17" font-style="italic">perturb assets</text>
+  <text x="810" y="738" font-size="9" fill="#F57F17" font-style="italic">perturb dynamics</text>
+
+  <!-- sensitivity scenarios -->
+  <line x1="440" y1="815" x2="310" y2="848" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="510" y1="815" x2="510" y2="848" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="600" y1="815" x2="600" y2="848" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <line x1="660" y1="815" x2="790" y2="848" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+
+  <g filter="url(#sh)">
+    <rect x="225" y="852" width="130" height="30" rx="6" fill="#FFF9C4" stroke="#F9A825" stroke-width="0.8"/>
+    <text x="290" y="872" text-anchor="middle" font-size="10" fill="#F57F17">Reduced budget</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="445" y="852" width="130" height="30" rx="6" fill="#FFF9C4" stroke="#F9A825" stroke-width="0.8"/>
+    <text x="510" y="872" text-anchor="middle" font-size="10" fill="#F57F17">Fewer drones</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="535" y="892" width="130" height="30" rx="6" fill="#FFF9C4" stroke="#F9A825" stroke-width="0.8"/>
+    <text x="600" y="912" text-anchor="middle" font-size="10" fill="#F57F17">Patrol changes</text>
+  </g>
+  <g filter="url(#sh)">
+    <rect x="725" y="852" width="130" height="30" rx="6" fill="#FFF9C4" stroke="#F9A825" stroke-width="0.8"/>
+    <text x="790" y="872" text-anchor="middle" font-size="10" fill="#F57F17">Climate shift</text>
+  </g>
+
+  <!-- ═══════════════════════ -->
+  <!-- PILLAR 1 output boxes  -->
+  <!-- ═══════════════════════ -->
+
+  <!-- small note about pillar 1 output going to pillar 3 too -->
+  <path d="M 320 390 Q 400 430 500 470 Q 600 510 770 525 Q 790 530 810 540" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#arr-gray)"/>
+  <text x="520" y="510" font-size="8.5" fill="#999" font-style="italic">species vulnerability</text>
+
+  <!-- ════════ -->
+  <!-- LEGEND   -->
+  <!-- ════════ -->
+  <g transform="translate(80, 945)">
+    <text x="0" y="0" font-size="9.5" font-weight="600" fill="#555">Legend:</text>
+    <line x1="55" y1="-3" x2="85" y2="-3" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+    <text x="90" y="0" font-size="9" fill="#666">data flow</text>
+    <line x1="165" y1="-3" x2="195" y2="-3" stroke="#999" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arr-gray)"/>
+    <text x="200" y="0" font-size="9" fill="#666">cross-pillar dependency</text>
+
+    <rect x="370" y="-10" width="12" height="12" rx="2" fill="#E8F5E9" stroke="#43A047" stroke-width="0.8"/>
+    <text x="387" y="0" font-size="9" fill="#666">Risk (Req. 1)</text>
+    <rect x="460" y="-10" width="12" height="12" rx="2" fill="#E3F2FD" stroke="#1E88E5" stroke-width="0.8"/>
+    <text x="477" y="0" font-size="9" fill="#666">Optimization (Req. 2)</text>
+    <rect x="580" y="-10" width="12" height="12" rx="2" fill="#FFF3E0" stroke="#F57C00" stroke-width="0.8"/>
+    <text x="597" y="0" font-size="9" fill="#666">Impact (Req. 3)</text>
+    <rect x="680" y="-10" width="12" height="12" rx="2" fill="#FFF9C4" stroke="#F9A825" stroke-width="0.8"/>
+    <text x="697" y="0" font-size="9" fill="#666">Sensitivity (Req. 4)</text>
+  </g>
+</svg>
