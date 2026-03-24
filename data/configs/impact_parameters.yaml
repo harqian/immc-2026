@@ -38,7 +38,7 @@ species:
       forage: 0.12
       space: 0.08
   black_rhino:
-    N0: 70
+    N0: 1500
     r_s: 0.0004
     mu_fire_base: 0.0003
     alpha_poach_base: 0.0003
